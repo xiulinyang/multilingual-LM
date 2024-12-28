@@ -1,0 +1,13 @@
+# dataset_shuffle_control_tr_TR_seed41.yaml
+#   Configuration for altered babylm-dataset
+---
+dataset:
+    id: /local/xiulyang/mission-impossible-language-models/training/babylm_dataset.py
+    name: shuffle_control_tr_TR_seed41
+    validation_ratio: null
+
+    # Number of Preprocessing Workers
+    num_proc: 4
+
+    # Number of Evaluation Preprocessing Workers
+    eval_num_proc: 4
