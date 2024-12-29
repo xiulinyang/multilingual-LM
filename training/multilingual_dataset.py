@@ -16,7 +16,7 @@ _DESCRIPTION = """\
 _ROOT_PATH = 'local/xiulyang'
 _PERTURBED_DATA_PATH = f"/{_ROOT_PATH}/mission-impossible-language-models/data/multilingual/multilingual_data_perturbed"
 _PERTURBATIONS = ["shuffle_control_tr","shuffle_control_de","shuffle_control_en","shuffle_control_ru", "shuffle_control_ro"]
-_RANDOM_SEEDS = [41,53]
+_RANDOM_SEEDS = [41,53,81]
 _TRAIN_SETS = ["DE","TR","RU", "RO", "EN"]
 _EOS_TOKEN_ID = 0
 
