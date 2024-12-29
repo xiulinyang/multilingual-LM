@@ -7,7 +7,7 @@ sys.path.append("..")
 
 from jinja2 import Template
 from utils import PERTURBATIONS, CHECKPOINT_WRITE_PATH, \
-    PAREN_MODELS, PAREN_MODEL_PATH
+    PAREN_MODELS, PAREN_MODEL_PATH, EXP_LANGS
 import argparse
 import os
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
                         default='all',
                         const='all',
                         nargs='?',
-                        choices=["EN","DE","RU","TR","RO"],
+                        choices=EXP_LANGS,
                         help='BabyLM train set')
     parser.add_argument('random_seed', type=int, help="Random seed")
     parser.add_argument('paren_model',
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     print("Generating train yaml file...")
 
     # Get train template file
-    train_temp_file = open("conf/template/babylm_train_template.yaml")
+    train_temp_file = open("conf/template/multilingual_train_template.yaml")
     lines = train_temp_file.readlines()
     train_temp_file.close()
 
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     print("Generating dataset yaml file...")
 
     # Get dataset temp file
-    dataset_temp_file = open("conf/template/babylm_dataset_template.yaml")
+    dataset_temp_file = open("conf/template/multilingual_dataset_template.yaml")
     lines = dataset_temp_file.readlines()
     dataset_temp_file.close()
 

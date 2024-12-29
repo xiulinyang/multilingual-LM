@@ -1,0 +1,3 @@
+[submodule "mustral"]
+	path = mustral
+	url = https://github.com/xiulinyang/mistral

@@ -30,7 +30,7 @@ resume_checkpoint: null
 #   - Frequency (`freq`) at which to save checkpoints (# steps)
 #   - Bound (`until`) on global step for given frequency (checkpoint every `freq` steps until global step = `until`)
 checkpoint_frequency:
-    - [50, 3000]
+    - [100, 3000]
 
 # `torch.distributed` Default Infra Parameters -- to be overwritten by call to `torch.distributed.launch`
 local_rank: -1

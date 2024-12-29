@@ -482,6 +482,8 @@ def test_tokenizer(tokenizer):
     print('a')
     print(len(tokenizer))
     print(tokenizer.encode('<|endoftext|>'))
+
+
 gpt2_tokenizer_de = get_gpt2_tokenizer_with_markers([], 'DE') 
 gpt2_tokenizer_en = get_gpt2_tokenizer_with_markers([],'EN')
 gpt2_tokenizer_tr = get_gpt2_tokenizer_with_markers([],'TR')
@@ -492,7 +494,8 @@ gpt2_tokenizer_nl = get_gpt2_tokenizer_with_markers([], 'NL')
 gpt2_tokenizer_pl = get_gpt2_tokenizer_with_markers([], 'PL')
 gpt2_tokenizer_it = get_gpt2_tokenizer_with_markers([], 'IT')
 gpt2_tokenizer_zh = get_gpt2_tokenizer_with_markers([], 'ZH')
-test_tokenizer(gpt2_tokenizer_zh)
+
+
 gpt2_hop_tokenizer_en = get_gpt2_tokenizer_with_markers(
            [MARKER_HOP_SING, MARKER_HOP_PLUR], 'EN')
 gpt2_rev_tokenizer_en = get_gpt2_tokenizer_with_markers(
@@ -521,7 +524,7 @@ marker_pl_token = gpt2_hop_tokenizer_en.get_added_vocab()[
 ##############################################################################
 
 
-TOKENIZATIONER = {
+TOKENIZER = {
 'EN':{"shuffle": gpt2_tokenizer_en},
 "DE":{"shuffle": gpt2_tokenizer_de},
 "RU":{"shuffle": gpt2_tokenizer_ru},
@@ -533,255 +536,73 @@ TOKENIZATIONER = {
 "ZH":{"shuffle": gpt2_tokenizer_zh},
 "PL":{"shuffle": gpt2_tokenizer_pl},
 }
-PERTURBATIONS = {
-    "shuffle_control_en": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='EN', seed=None, shuffle=False),
-        "lang": 'en',
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['EN']['shuffle'],
-        "color": "#606060",
-    },
-    "shuffle_control_fr": {
-    "perturbation_function": partial(perturb_shuffle_deterministic, lang='FR', seed=None, shuffle=False),
-    "lang": 'fr',
-    "affect_function": affect_shuffle,
-    "filter_function": filter_shuffle,
-    "gpt2_tokenizer": TOKENIZATIONER['FR']['shuffle'],
-    "color": "#606060",
-                                                            },
-"shuffle_control_de": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='DE', seed=None, shuffle=False),
-        "lang": 'de',
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['DE']['shuffle'],
-        "color": "#606060",
-    },
-"shuffle_control_nl": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='NL', seed=None, shuffle=False),
-        "lang": 'nl',
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['NL']['shuffle'],
-        "color": "#606060",
-        },
-"shuffle_control_it": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='IT', seed=None, shuffle=False),
-         "lang": 'it',
-         "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['IT']['shuffle'],
-         "color": "#606060",
-                },
-"shuffle_control_tr": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='TR', seed=None, shuffle=False),
-        "lang": 'tr',
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['TR']['shuffle'],
-        "color": "#606060",
-    },
-"shuffle_control_zh": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='ZH', seed=None, shuffle=False),
-        "lang": 'zh',
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['ZH']['shuffle'],
-        "color": "#606060",
-    },
-"shuffle_control_ro": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='RO', seed=None, shuffle=False),
-        "lang": 'ro',
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['RO']['shuffle'],
-        "color": "#606060",
-    },
-"shuffle_control_ru": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='RU', seed=None, shuffle=False),
-        "lang": 'ru',
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['RU']['shuffle'],
-        "color": "#606060",
-    },
-    "shuffle_local3_en": {
-        "perturbation_function": partial(perturb_shuffle_local, lang='EN', seed=0, window=3),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['EN']['shuffle'],
-        "color": "#208EA3",
-    },
-    "shuffle_nondeterministic_en": {
-        "perturbation_function": partial(perturb_shuffle_nondeterministic, lang='EN', rng=default_rng(0)),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['EN']['shuffle'],
-        "color": "#E8384F",
-    },
-  "shuffle_nondeterministic_tr": {
-        "perturbation_function": partial(perturb_shuffle_nondeterministic, lang='TR', rng=default_rng(0)),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['TR']['shuffle'],
-        "color": "#E8384F",
-    },
- "shuffle_nondeterministic_tr": {
-        "perturbation_function": partial(perturb_shuffle_nondeterministic, lang='TR', rng=default_rng(0)),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['TR']['shuffle'],
-            "color": "#E8384F",
-                },
-    "shuffle_deterministic21_en": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='EN', seed=21, shuffle=True),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['EN']['shuffle'],
-        "color": "#FFB000",
-    },
-        "shuffle_deterministic21_tr": {
-            "perturbation_function": partial(perturb_shuffle_deterministic, lang='TR', seed=21, shuffle=True),
+
+
+FUNCTION_MAP = {
+    'shuffle_control': {'function': perturb_shuffle_deterministic,'seed': None, 'shuffle': False},
+    'shuffle_local3': {'function':perturb_shuffle_local,'seed': None,  'window': 3},
+    'shuffle_local5': {'function':perturb_shuffle_local,'seed': None,  'window': 5},
+    'shuffle_local10': {'function':perturb_shuffle_local,'seed': None, 'window': 10},
+    'shuffle_deterministic21':{'function': perturb_shuffle_deterministic, 'seed':21, 'shuffle':True},
+    'shuffle_deterministic57': {'function': perturb_shuffle_deterministic, 'seed':57, 'shuffle':True},
+    'shuffle_deterministic84': {'function': perturb_shuffle_deterministic, 'seed':84, 'shuffle':True},
+    'shuffle_nondeterministic':{'function': perturb_shuffle_nondeterministic, 'rng': default_rng(0)},
+    'shuffle_even_odd':{'function':perturb_shuffle_even_odd},
+    'shuffle_deterministic21_word': {'function': perturb_shuffle_deterministic_word,'seed':21, 'shuffle':True},
+    'shuffle_local3_word':{'function':perturb_shuffle_local,'seed': None,'window': 3}
+}
+
+def get_perturbations(lang, function):
+    lang_name = lang.lower()
+    function_name = function+'_'+lang_name
+    if 'shuffle_local' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, window=FUNCTION_MAP[function]['window']),
+            "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
-            "gpt2_tokenizer": TOKENIZATIONER['TR']['shuffle'],
-             "color": "#FFB000",
-    },
+            "gpt2_tokenizer": TOKENIZATIONER[lang_name]['shuffle'],
+        }}
+    elif 'shuffle_deterministic' in function:
+        return {
+            function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seed=FUNCTION_MAP[function]['seed'], shuffle=FUNCTION_MAP[function]['shuffle']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+        }}
+    elif 'shuffle_control' in function:
+        return {
+            function_name: {
+                "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang,
+                                                 seed=None,
+                                                 shuffle=False),
+                "lang": lang_name,
+                "affect_function": affect_shuffle,
+                "filter_function": filter_shuffle,
+                "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+            }}
+    elif 'shuffle_even_odd' in function:
+        return {
+            function_name: {
+                "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang),
+                "lang": lang_name,
+                "affect_function": affect_shuffle,
+                "filter_function": filter_shuffle,
+                "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+            }}
 
-    "shuffle_deterministic57_en": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='EN',seed=57, shuffle=True),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer":TOKENIZATIONER['EN']['shuffle'],
-        "color": "#8db000",
-    },
-    "shuffle_deterministic84_en": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='EN',seed=84, shuffle=True),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['EN']['shuffle'],
-        "color": "#62BB35",
-    },
+    elif 'shuffle_nondeterministic' in function:
+        return {
+            function_name: {
+                "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, rng=FUNCTION_MAP[function]['rng']),
+                "lang": lang_name,
+                "affect_function": affect_shuffle,
+                "filter_function": filter_shuffle,
+                "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+            }}
 
-    "shuffle_deterministic57_tr": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='TR',seed=57, shuffle=True),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer":TOKENIZATIONER['TR']['shuffle'],
-        "color": "#8db000",
-                                                          },
+    else:
+        raise WarningMessage('The pertubation is not available!')
 
-      "shuffle_deterministic21_word_tr": {
-        "perturbation_function": partial(perturb_shuffle_deterministic_word, lang='TR',seed=21, shuffle=True),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer":TOKENIZATIONER['TR']['shuffle'],
-        "color": "#8db000",
-                                                          },
-     "shuffle_deterministic84_tr": {
-        "perturbation_function": partial(perturb_shuffle_deterministic, lang='TR',seed=84, shuffle=True),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['TR']['shuffle'],
-            "color": "#62BB35",
-                                                              },
-    "shuffle_local5_en": {
-        "perturbation_function": partial(perturb_shuffle_local, lang='EN',seed=0, window=5),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer":TOKENIZATIONER['EN']['shuffle'],
-        "color": "#4178BC",
-    },
-    "shuffle_local10_en": {
-        "perturbation_function": partial(perturb_shuffle_local, lang='EN',seed=0, window=10),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['EN']['shuffle'],
-        "color": "#AA71FF",
-    },
-    "shuffle_even_odd_en": {
-        "perturbation_function": partial(perturb_shuffle_even_odd, lang='EN'),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['EN']['shuffle'],
-        "color": "#E37CFF",
-    },
-
-    "shuffle_local5_tr": {
-        "perturbation_function": partial(perturb_shuffle_local, lang='TR',seed=0, window=5),
-        "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-        "gpt2_tokenizer":TOKENIZATIONER['TR']['shuffle'],
-         "color": "#4178BC",
-                                                            },
-    "shuffle_local10_tr": {
-        "perturbation_function": partial(perturb_shuffle_local, lang='TR',seed=0, window=10),
-         "affect_function": affect_shuffle,
-         "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['TR']['shuffle'],
-         "color": "#AA71FF",
-                             },
-        "shuffle_even_odd_tr": {
-        "perturbation_function": partial(perturb_shuffle_even_odd, lang='TR'),
-        "affect_function": affect_shuffle,
-         "filter_function": filter_shuffle,
-        "gpt2_tokenizer": TOKENIZATIONER['TR']['shuffle'],
-        "color": "#E37CFF",},
-        "shuffle_local3_tr": {
-        "perturbation_function": partial(perturb_shuffle_local, lang='TR',seed=0, window=3),
-         "affect_function": affect_shuffle,
-        "filter_function": filter_shuffle,
-          "gpt2_tokenizer":TOKENIZATIONER['TR']['shuffle'],
-         "color": "#4178BC",},
-
-        "shuffle_local3_word_tr": {
-         "perturbation_function": partial(perturb_shuffle_local_word, lang='TR',seed=0, window=3),
-         "affect_function": affect_shuffle,
-         "filter_function": filter_shuffle,
-        "gpt2_tokenizer":TOKENIZATIONER['TR']['shuffle'],
-         "color": "#4178BC",},
-                                                                                                                     
-    # "reverse_control": {
-    #     "perturbation_function": partial(perturb_reverse, rng=default_rng(21), reverse=False, full=False),
-    #     "affect_function": affect_reverse,
-    #     "filter_function": filter_reverse,
-    #     "gpt2_tokenizer": gpt2_rev_tokenizer,
-    #     "color": "#606060",
-    # },
-    # "reverse_partial": {
-    #     "perturbation_function": partial(perturb_reverse, rng=default_rng(21), reverse=True, full=False),
-    #     "affect_function": affect_reverse,
-    #     "filter_function": filter_reverse,
-    #     "gpt2_tokenizer": gpt2_rev_tokenizer,
-    #     "color": "#E5A836",
-    # },
-    # "reverse_full": {
-    #     "perturbation_function": partial(perturb_reverse, rng=default_rng(21), reverse=False, full=True),
-    #     "affect_function": affect_reverse,
-    #     "filter_function": filter_reverse,
-    #     "gpt2_tokenizer": gpt2_rev_tokenizer,
-    #     "color": "#A348A6",
-    # },
-    # "hop_control": {
-    #     "perturbation_function": perturb_hop_control,
-    #     "affect_function": affect_hop,
-    #     "filter_function": filter_hop,
-    #     "gpt2_tokenizer": gpt2_hop_tokenizer,
-    #     "color": "#606060",
-    # },
-    # "hop_tokens4": {
-    #     "perturbation_function": perturb_hop_tokens4,
-    #     "affect_function": affect_hop,
-    #     "filter_function": filter_hop,
-    #     "gpt2_tokenizer": gpt2_hop_tokenizer,
-    #     "color": "#fa8128",
-    # },
-    # "hop_words4": {
-    #     "perturbation_function": perturb_hop_words4,
-    #     "affect_function": affect_hop,
-    #     "filter_function": filter_hop,
-    #     "gpt2_tokenizer": gpt2_hop_tokenizer,
-    #     "color": "#03a0ff",
-    # },
-}

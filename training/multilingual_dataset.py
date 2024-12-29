@@ -1,4 +1,4 @@
-# babylm_dataset.py
+# multilingual_dataset.py
 # author: Julie Kallini
 
 import datasets

@@ -2,7 +2,7 @@
 #   Configuration for altered babylm-dataset
 ---
 dataset:
-    id: /local/xiulyang/mission-impossible-language-models/training/babylm_dataset.py
+    id: /local/xiulyang/mission-impossible-language-models/training/multilingual_dataset.py
     name: shuffle_control_tr_TR_seed41
     validation_ratio: null
 
