@@ -16,7 +16,7 @@ _DESCRIPTION = """\
     Pre-tokenized BabyLM HuggingFace dataset for verb perturbations.
 """
 _ROOT_PATH = 'local/xiulyang'
-_PERTURBED_DATA_PATH = f"/{_ROOT_PATH}/mission-impossible-language-models/data/multilingual/multilingual_data_perturbed"
+_PERTURBED_DATA_PATH = f"/{_ROOT_PATH}/multilingual-LM/data/multilingual/multilingual_data_perturbed"
 _FUNCTIONS = [
     "shuffle_local3",
     "shuffle_local5",
