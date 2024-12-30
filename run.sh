@@ -2,9 +2,9 @@
 
 # Accept a language argument
 LANGUAGE=$1
-GPU=$2
-PERTURB=$3
-RANDOMSEED=$4
+#GPU=$2
+PERTURB=$2
+RANDOMSEED=$3
 
 # Default value if no argument is provided
 if [ -z "$LANGUAGE" ]; then
@@ -37,9 +37,10 @@ source ~/.bashrc
 conda deactivate
 conda activate mistral
 
-CUDA_VISIBLE_DEVICES=$GPU python3 train.py --config conf/train_${PERTURB}_${LANGUAGE,,}_${LANGUAGE}_randinit_seed${RANDOMSEED}.yaml --nnodes 1 --nproc_per_node 1 --training_arguments.fp16 true --training_arguments.warmup_steps 120 --training_arguments.max_steps 1200
+python3 train.py --config conf/train_${PERTURB}_${LANGUAGE,,}_${LANGUAGE}_randinit_seed${RANDOMSEED}.yaml --nnodes 1 --nproc_per_node 1 --training_arguments.fp16 true --training_arguments.warmup_steps 120 --training_arguments.max_steps 1200
     
 cd ..
 cd perplexities
 conda activate mission
-CUDA_VISIBLE_DEVICES=$GPU python perplexities_exp.py ${PERTURB} ${PERTURB} $LANGUAGE $RANDOMSEED randinit pretrained
+python perplexities_exp.py ${PERTURB} ${PERTURB} $LANGUAGE $RANDOMSEED randinit pretrained
+
