@@ -69,7 +69,7 @@ if __name__ == "__main__":
     model_template = Template("".join(lines))
     model_conf = model_template.render(
         perturbation=f'{args.perturbation_type}_{language}',
-        lang=language,
+        lang=language.upper(),
         paren_model=paren_model_name,
         paren_model_path=paren_model_path,
         no_pos_encodings=no_pos_encodings_str,
