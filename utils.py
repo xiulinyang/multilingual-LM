@@ -32,8 +32,8 @@ GENRES = {
     "switchboard": "Switchboard Dialog Act Corpus",
     "wikipedia": "Wikipedia"
 }
-CHECKPOINT_WRITE_PATH = f"/{ROOT_PATH}/babylm_models"
-CHECKPOINT_READ_PATH = f"/{ROOT_PATH}/babylm_models"
+CHECKPOINT_WRITE_PATH = f"/{ROOT_PATH}/multilingual_models"
+CHECKPOINT_READ_PATH = f"/{ROOT_PATH}/multilingual_models"
 TOKENIZER_PATH = f"/{ROOT_PATH}/mission-impossible-language-models/tokenizers"
 MULTILINGUAL_DATA_PATH = f"/{ROOT_PATH}/mission-impossible-language-models/data/multilingual/"
 MARKER_HOP_SING = "🅂"

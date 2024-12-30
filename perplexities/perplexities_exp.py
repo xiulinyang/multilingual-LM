@@ -7,7 +7,7 @@ sys.path.append("..")
 
 from transformers import GPT2LMHeadModel
 from gpt2_no_positional_encoding_model import GPT2NoPositionalEncodingLMHeadModel
-from utils import CHECKPOINT_READ_PATH, PERTURBATIONS, BABYLM_DATA_PATH, \
+from utils import CHECKPOINT_READ_PATH, FUNCTION_MAP, MULTILINGUAL_DATA_PATH, \
     PAREN_MODELS, TOKENIZATIONER, EXP_LANGS
 from tqdm import tqdm
 from glob import glob
@@ -84,13 +84,13 @@ if __name__ == "__main__":
                         default='all',
                         const='all',
                         nargs='?',
-                        choices=PERTURBATIONS.keys(),
+                        choices=FUNCTION_MAP.keys(),
                         help='Perturbation function used to transform BabyLM dataset')
     parser.add_argument('test_perturbation_type',
                         default='all',
                         const='all',
                         nargs='?',
-                        choices=PERTURBATIONS.keys(),
+                        choices=FUNCTION_MAP.keys(),
                         help='Perturbation function used to transform test BabyLM dataset')
     parser.add_argument('train_set',
                         default='all',
@@ -114,14 +114,15 @@ if __name__ == "__main__":
     no_pos_encodings_underscore = "_no_positional_encodings" if args.no_pos_encodings else ""
     vs = args.vs
     la = args.train_set
+    lang_lower_case = args.train_set.lower()
     gpt2_tokenizer = TOKENIZATIONER[la]['shuffle']
     # Get path to model
-    model = f"{args.perturbation_type}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}_seed{args.random_seed}"
-    model_path = f"{CHECKPOINT_READ_PATH}/{args.perturbation_type}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}/babylm_{model}/runs/{model}/checkpoint-"
+    model = f"{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}_seed{args.random_seed}"
+    model_path = f"{CHECKPOINT_READ_PATH}/{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}/{model}/runs/{model}/checkpoint-"
 
     # Get perturbed test files
     test_files = sorted(glob(
-        f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/{args.test_perturbation_type}/test_affected/*"))
+        f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/{args.test_perturbation_type}_{lang_lower_case}/test_affected/*"))
 
     #FILE_SAMPLE_SIZE = 1000
     rng = default_rng(args.random_seed)
@@ -181,6 +182,6 @@ if __name__ == "__main__":
         os.makedirs(directory)
     vs = str(vs)
     file = directory + \
-        f"/{args.paren_model}_seed{args.random_seed}_test_{args.test_perturbation_type}_{vs}.csv"
+        f"/{args.paren_model}_seed{args.random_seed}_test_{args.test_perturbation_type}_{lang_lower_case}_{vs}.csv"
     print(f"Writing results to CSV: {file}")
     ppl_df.to_csv(file)

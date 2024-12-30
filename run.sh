@@ -26,7 +26,7 @@ python perturb.py ${PERTURB} $LANGUAGE test
 cd ..
 cd training
 
-bash prepare_training.sh ${PERTURB}_${LANGUAGE,,} $LANGUAGE $RANDOM randinit
+bash prepare_training.sh ${PERTURB} $LANGUAGE $RANDOM randinit
 
 cd ..
 cd mistral
@@ -41,4 +41,4 @@ CUDA_VISIBLE_DEVICES=$GPU python3 train.py --config conf/train_${PERTURB}_${LANG
 cd ..
 cd perplexities
 conda activate mission
-CUDA_VISIBLE_DEVICES=$GPU python perplexities.py ${PERTURB}_${LANGUAGE,,} ${PERTURB}_${LANGUAGE,,} $LANGUAGE $RANDOM randinit pretrained
+CUDA_VISIBLE_DEVICES=$GPU python perplexities.py ${PERTURB} ${PERTURB} $LANGUAGE $RANDOM randinit pretrained

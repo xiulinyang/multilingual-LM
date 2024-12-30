@@ -6,7 +6,7 @@ import sys
 sys.path.append("..")
 
 from jinja2 import Template
-from utils import PERTURBATIONS, CHECKPOINT_WRITE_PATH, \
+from utils import FUNCTION_MAP, get_perturbations, CHECKPOINT_WRITE_PATH, \
     PAREN_MODELS, PAREN_MODEL_PATH, EXP_LANGS
 import argparse
 import os
@@ -21,7 +21,7 @@ if __name__ == "__main__":
                         default='all',
                         const='all',
                         nargs='?',
-                        choices=PERTURBATIONS.keys(),
+                        choices=FUNCTION_MAP.keys(),
                         help='Perturbation function used to transform dataset')
     parser.add_argument('train_set',
                         default='all',
@@ -41,6 +41,7 @@ if __name__ == "__main__":
 
     # Get args
     args = parser.parse_args()
+    language = args.train_set.lower()
     if args.paren_model != "randinit":
         paren_model_path = PAREN_MODEL_PATH + PAREN_MODELS[args.paren_model] + "/checkpoint-5000"
     else:
@@ -50,25 +51,25 @@ if __name__ == "__main__":
     no_pos_encodings_underscore = "_no_positional_encodings" if args.no_pos_encodings else ""
 
     # Create directory for yaml
-    yaml_directory = f"conf/{args.perturbation_type}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}/seed{args.random_seed}"
+    yaml_directory = f"conf/{args.perturbation_type}_{language}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}/seed{args.random_seed}"
     if not os.path.exists(yaml_directory):
         os.makedirs(yaml_directory)
 
     print("Generating GPT-2 model yaml file...")
-    language = args.train_set
+
 
     # Get model template, which varies due to changes in vocab size
     model_temp_file = open("conf/template/gpt2-small-template.yaml")
     lines = model_temp_file.readlines()
     model_temp_file.close()
-
+    PERTURBATIONS = get_perturbations(args.train_set, args.perturbation_type)
     # Fill model template
-    tokenizer = PERTURBATIONS[args.perturbation_type]["gpt2_tokenizer"]
+    tokenizer = PERTURBATIONS[f'{args.perturbation_type}_{language}']["gpt2_tokenizer"]
     print(tokenizer)
     print(vocab_size)
     model_template = Template("".join(lines))
     model_conf = model_template.render(
-        perturbation=args.perturbation_type,
+        perturbation=f'{args.perturbation_type}_{language}',
         lang=language,
         paren_model=paren_model_name,
         paren_model_path=paren_model_path,
@@ -77,7 +78,7 @@ if __name__ == "__main__":
 
     # Write model yaml to file
     model_file = open(
-        f"conf/{args.perturbation_type}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}/gpt2{no_pos_encodings_str}-small-{args.perturbation_type}-{paren_model_name}.yaml", "w")
+        f"conf/{args.perturbation_type}_{language}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}/gpt2{no_pos_encodings_str}-small-{args.perturbation_type}_{language}-{paren_model_name}.yaml", "w")
     model_file.write(model_conf)
     model_file.close()
 
@@ -91,7 +92,7 @@ if __name__ == "__main__":
     # Fill train template file
     train_template = Template("".join(lines))
     train_conf = train_template.render(
-        perturbation=args.perturbation_type,
+        perturbation=f'{args.perturbation_type}_{language}',
         seed=args.random_seed,
         ckpt_path=CHECKPOINT_WRITE_PATH,
         train_set=args.train_set,
@@ -102,7 +103,7 @@ if __name__ == "__main__":
 
     # Write train yaml to file
     train_file = open(yaml_directory + \
-        f"/train_{args.perturbation_type}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}_seed{args.random_seed}.yaml", "w")
+        f"/train_{args.perturbation_type}_{language}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}_seed{args.random_seed}.yaml", "w")
     train_file.write(train_conf)
     train_file.close()
 
@@ -116,18 +117,18 @@ if __name__ == "__main__":
     # Fill dataset template file
     dataset_template = Template("".join(lines))
     dataset_conf = dataset_template.render(
-        perturbation=args.perturbation_type,
+        perturbation=f'{args.perturbation_type}_{language}',
         train_set=args.train_set,
         seed=args.random_seed,
     )
 
     # Write dataset yaml to file
     dataset_file = open(yaml_directory + \
-        f"/dataset_{args.perturbation_type}_{args.train_set}_seed{args.random_seed}.yaml", "w")
+        f"/dataset_{args.perturbation_type}_{language}_{args.train_set}_seed{args.random_seed}.yaml", "w")
     dataset_file.write(dataset_conf)
     dataset_file.close()
 
     # Create directory for model checkpoints
-    ckpt_directory = CHECKPOINT_WRITE_PATH + f"/{args.perturbation_type}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}"
+    ckpt_directory = CHECKPOINT_WRITE_PATH + f"/{args.perturbation_type}_{language}_{args.train_set}_{paren_model_name}{no_pos_encodings_underscore}"
     if not os.path.exists(ckpt_directory):
         os.makedirs(ckpt_directory)
