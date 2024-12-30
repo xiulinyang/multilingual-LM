@@ -115,7 +115,7 @@ if __name__ == "__main__":
     vs = args.vs
     la = args.train_set
     lang_lower_case = args.train_set.lower()
-    gpt2_tokenizer = TOKENIZATIONER[la]['shuffle']
+    gpt2_tokenizer = TOKENIZER[la]['shuffle']
     # Get path to model
     model = f"{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}_seed{args.random_seed}"
     model_path = f"{CHECKPOINT_READ_PATH}/{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}/{model}/runs/{model}/checkpoint-"
