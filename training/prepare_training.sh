@@ -16,8 +16,8 @@ echo "Paren pretrained model: $4"
 NO_POS_ENCODINGS=${5:-''}
 echo "No pos encodings: $NO_POS_ENCODINGS"
 echo "Mistral path: $MISTRAL_PATH"
-LOWERCASE={$2,,}
-ech "lowercased: LOWERCASE"
+${LOWERCASE}={$2,,}
+echo "lowercased: $${LOWERCASE}"
 if [ -z "$NO_POS_ENCODINGS" ]
 then
 	    NPS=""
@@ -43,17 +43,17 @@ echo "
 Copying config yaml files to mistral directory
 -------------------------------------------------------------------------------
 "
-COPY_DATASET_COMMAND="cp conf/$1_LOWERCASE_$2_$4$NPSunderscore/seed$3/dataset_$1_LOWERCASE_$2_seed$3.yaml $MISTRAL_PATH/conf/datasets/dataset_$1_LOWERCASE_$2_seed$3.yaml"
+COPY_DATASET_COMMAND="cp conf/$1_${LOWERCASE}_$2_$4$NPSunderscore/seed$3/dataset_$1_${LOWERCASE}_$2_seed$3.yaml $MISTRAL_PATH/conf/datasets/dataset_$1_${LOWERCASE}_$2_seed$3.yaml"
 echo $COPY_DATASET_COMMAND
 eval $COPY_DATASET_COMMAND
 echo ""
 
-COPY_TRAIN_COMMAND="cp conf/$1_LOWERCASE_$2_$4$NPSunderscore/seed$3/train_$1_LOWERCASE_$2_$4$NPSunderscore"_"seed$3.yaml $MISTRAL_PATH/conf/train_$1_LOWERCASE_$2_$4$NPSunderscore"_"seed$3.yaml"
+COPY_TRAIN_COMMAND="cp conf/$1_${LOWERCASE}_$2_$4$NPSunderscore/seed$3/train_$1_${LOWERCASE}_$2_$4$NPSunderscore"_"seed$3.yaml $MISTRAL_PATH/conf/train_$1_${LOWERCASE}_$2_$4$NPSunderscore"_"seed$3.yaml"
 echo $COPY_TRAIN_COMMAND
 eval $COPY_TRAIN_COMMAND
 echo ""
 
-COPY_MODEL_COMMAND="cp conf/$1_LOWERCASE_$2_$4$NPSunderscore/gpt2$NPS-small-$1_LOWERCASE-$4.yaml $MISTRAL_PATH/conf/models/gpt2$NPS-small-$1_LOWERCASE-$4.yaml"
+COPY_MODEL_COMMAND="cp conf/$1_${LOWERCASE}_$2_$4$NPSunderscore/gpt2$NPS-small-$1_${LOWERCASE}-$4.yaml $MISTRAL_PATH/conf/models/gpt2$NPS-small-$1_${LOWERCASE}-$4.yaml"
 echo $COPY_MODEL_COMMAND
 eval $COPY_MODEL_COMMAND
 
