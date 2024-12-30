@@ -20,9 +20,9 @@ rm -rf ${PERTURB}_${LANGUAGE,,}/
 cd ..
 cd ..
 
-#python perturb.py ${PERTURB} $LANGUAGE train
-#python perturb.py ${PERTURB} $LANGUAGE dev
-#python perturb.py ${PERTURB} $LANGUAGE test
+python perturb.py ${PERTURB} $LANGUAGE train
+python perturb.py ${PERTURB} $LANGUAGE dev
+python perturb.py ${PERTURB} $LANGUAGE test
 
 cd ..
 cd training
@@ -42,4 +42,4 @@ CUDA_VISIBLE_DEVICES=$GPU python3 train.py --config conf/train_${PERTURB}_${LANG
 cd ..
 cd perplexities
 conda activate mission
-CUDA_VISIBLE_DEVICES=$GPU python perplexities.py ${PERTURB} ${PERTURB} $LANGUAGE $RANDOMSEED randinit pretrained
+CUDA_VISIBLE_DEVICES=$GPU python perplexities_exp.py ${PERTURB} ${PERTURB} $LANGUAGE $RANDOMSEED randinit pretrained

@@ -26,7 +26,7 @@ _FUNCTIONS = [
     "shuffle_even_odd",
 ]
 _TRAIN_SETS = ["DE","TR","RU","RO","AR","NL","ZH","PL","PT","FR","IT","EN"]
-_PERTURBATIONS = [f"{p}_{lang}" for p in _FUNCTIONS for lang in _TRAIN_SETS]
+_PERTURBATIONS = [f"{p}_{lang.lower()}" for p in _FUNCTIONS for lang in _TRAIN_SETS]
 _RANDOM_SEEDS = [41,53,81]
 _EOS_TOKEN_ID = 0
 

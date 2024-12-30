@@ -1,0 +1,49 @@
+# train_shuffle_control_nl_NL_randinit_seed41.yaml
+#   Based on mistral-small.yaml.
+---
+# Inherit Dataset, Tokenization, Model, and Training Details
+inherit:
+    - datasets/dataset_shuffle_control_nl_NL_seed41.yaml
+    - models/gpt2-small-shuffle_control_nl-randinit.yaml
+    - trainers/gpt2-small.yaml
+
+# Run ID -- make sure to override!
+run_id: shuffle_control_nl_NL_randinit_seed41
+
+# Weights & Biases
+wandb: xiulin-yang-compling
+group: xiulin-yang
+
+# Artifacts & Caching
+artifacts:
+    cache_dir: //local/xiulyang/multilingual_models/shuffle_control_nl_NL_randinit/babylm_shuffle_control_nl_NL_randinit_seed41/artifacts
+    run_dir: //local/xiulyang/multilingual_models/shuffle_control_nl_NL_randinit/babylm_shuffle_control_nl_NL_randinit_seed41/runs
+
+# Save Effective Batch Size for Easy Handling ==> Main Code asserts infra + training_config results in this!
+effective_bsz: 512
+
+# Resume from Checkpoint
+resume: false
+resume_checkpoint: null
+
+# List of frequencies at which to save checkpoints, provided as a list of two-element tuples:
+#   - Frequency (`freq`) at which to save checkpoints (# steps)
+#   - Bound (`until`) on global step for given frequency (checkpoint every `freq` steps until global step = `until`)
+checkpoint_frequency:
+    - [100, 3000]
+
+# `torch.distributed` Default Infra Parameters -- to be overwritten by call to `torch.distributed.launch`
+local_rank: -1
+nnodes: -1
+nproc_per_node: -1
+
+# DeepSpeed Default Infra Parameters -- to be overwritten by call to `DeepSpeed`
+num_gpus: -1
+num_nodes: -1
+world_size: -1
+
+# Logging Parameters -- 10 = DEBUG, 20 = INFO, 30 = WARNING, 40 = ERROR, 50 = CRITICAL
+log_level: 20
+
+# Random Seed
+seed: 41
