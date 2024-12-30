@@ -17,6 +17,7 @@ NO_POS_ENCODINGS=${5:-''}
 echo "No pos encodings: $NO_POS_ENCODINGS"
 echo "Mistral path: $MISTRAL_PATH"
 LOWERCASE={$2,,}
+ech "lowercased: LOWERCASE"
 if [ -z "$NO_POS_ENCODINGS" ]
 then
 	    NPS=""
