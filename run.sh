@@ -19,9 +19,9 @@ rm -rf ${PERTURB}_${LANGUAGE,,}/
 cd ..
 cd ..
 
-python perturb.py ${PERTURB}_${LANGUAGE,,} $LANGUAGE train
-python perturb.py ${PERTURB}_${LANGUAGE,,} $LANGUAGE dev
-python perturb.py ${PERTURB}_${LANGUAGE,,} $LANGUAGE test
+python perturb.py ${PERTURB} $LANGUAGE train
+python perturb.py ${PERTURB} $LANGUAGE dev
+python perturb.py ${PERTURB} $LANGUAGE test
 
 cd ..
 cd training

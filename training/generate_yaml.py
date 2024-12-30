@@ -22,13 +22,13 @@ if __name__ == "__main__":
                         const='all',
                         nargs='?',
                         choices=PERTURBATIONS.keys(),
-                        help='Perturbation function used to transform BabyLM dataset')
+                        help='Perturbation function used to transform dataset')
     parser.add_argument('train_set',
                         default='all',
                         const='all',
                         nargs='?',
                         choices=EXP_LANGS,
-                        help='BabyLM train set')
+                        help='train set')
     parser.add_argument('random_seed', type=int, help="Random seed")
     parser.add_argument('paren_model',
                         default='all',
@@ -55,6 +55,7 @@ if __name__ == "__main__":
         os.makedirs(yaml_directory)
 
     print("Generating GPT-2 model yaml file...")
+    language = args.train_set
 
     # Get model template, which varies due to changes in vocab size
     model_temp_file = open("conf/template/gpt2-small-template.yaml")
@@ -63,13 +64,12 @@ if __name__ == "__main__":
 
     # Fill model template
     tokenizer = PERTURBATIONS[args.perturbation_type]["gpt2_tokenizer"]
-    vocab_size = len(tokenizer)
     print(tokenizer)
     print(vocab_size)
     model_template = Template("".join(lines))
     model_conf = model_template.render(
         perturbation=args.perturbation_type,
-        vocab_size=vocab_size,
+        lang=language,
         paren_model=paren_model_name,
         paren_model_path=paren_model_path,
         no_pos_encodings=no_pos_encodings_str,

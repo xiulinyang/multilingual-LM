@@ -5,8 +5,9 @@
 import sys
 sys.path.append("..")
 
-from utils import  EXP_LANGS, PERTURBATIONS, BABYLM_SPLITS, BABYLM_DATA_PATH, \
-    GENRES, write_file, MARKER_TOKEN_IDS, marker_rev_token,marker_sg_token,marker_pl_token
+from utils import EXP_LANGS, MULTILINGUAL_SPLITS, MULTILINGUAL_DATA_PATH,\
+    GENRES, write_file, MARKER_TOKEN_IDS, marker_rev_token, marker_sg_token, marker_pl_token, get_perturbations, \
+    FUNCTION_MAP
 from glob import glob
 import numpy as np
 import itertools
@@ -60,8 +61,8 @@ def test_3pres_all_equivalent(split, genre, perturbation_pair):
     elif split == "dev":
         filename = f"{genre}.dev"
 
-    path1 = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/babylm_3pres_{perturbation1}/{lang}/{split}/{filename}"
-    path2 = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/babylm_3pres_{perturbation2}/{lang}/{split}/{filename}"
+    path1 = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/multilingual_3pres_{perturbation1}/{lang}/{split}/{filename}"
+    path2 = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/multilingual_3pres_{perturbation2}/{lang}/{split}/{filename}"
 
     assert lines_equivalent_3pres(path1, path2), f"File {filename} of " + \
         f"3pres_{perturbation1} and 3pres_{perturbation2} have non-equivalent lines!"
@@ -115,8 +116,8 @@ def test_reversal_all_equivalent(split, genre, perturbation_pair):
     elif split == "dev":
         filename = f"{genre}.dev"
 
-    path1 = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation1}/multilingual_{split}/{filename}"
-    path2 = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation2}/multilingual_{split}/{filename}"
+    path1 = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation1}/multilingual_{split}/{filename}"
+    path2 = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation2}/multilingual_{split}/{filename}"
 
     assert lines_equivalent_reversal(path1, path2), f"File {filename} of " + \
         f"{perturbation1} and {perturbation2} have non-equivalent lines!"
@@ -139,7 +140,7 @@ def lines_equivalent_determiner_swap(det_path, ident_path):
             return False
 
     return True
-        
+
 
 perturbation_pairs_reversal = [
     ("determiner_swap", "determiner_swap_identity"),
@@ -161,8 +162,8 @@ def test_determiner_swap_all_equivalent(split, genre, perturbation_pair):
     elif split == "dev":
         filename = f"{genre}.dev"
 
-    path1 = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation1}/{lang}/{split}/{filename}"
-    path2 = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation2}/{lang}/{split}/{filename}"
+    path1 = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation1}/{lang}/{split}/{filename}"
+    path2 = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/multilingual_{perturbation2}/{lang}/{split}/{filename}"
 
     assert lines_equivalent_determiner_swap(path1, path2), f"File {filename} of " + \
         f"{perturbation1} and {perturbation2} have non-equivalent lines!"
@@ -175,11 +176,11 @@ def flatten_list(l):
 
 def process_line(line,lang):
     """
-    Process a given line from the dataset, apply transformations to its sentences, 
+    Process a given line from the dataset, apply transformations to its sentences,
     and categorize them into affected or unaffected based on the transformation.
 
     Parameters:
-    - line (dict): A dictionary representing a line from the dataset, which contains 
+    - line (dict): A dictionary representing a line from the dataset, which contains
       sentence annotations.
 
     Returns:
@@ -188,7 +189,7 @@ def process_line(line,lang):
         2. new_lines_unaffected (list of str): Sentences that were not affected by the transformation.
 
     Note:
-    - The transformation functions (`perturbation_function`, `affect_function`, `filter_function`) 
+    - The transformation functions (`perturbation_function`, `affect_function`, `filter_function`)
       are expected to be available in the global scope.
     """
 
@@ -222,50 +223,54 @@ def process_line(line,lang):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
-        prog='Perturb BabyLM dataset',
-        description='Perturb BabyLM dataset by altering POS-tagged data')
+        prog='Perturb MULTILINGUAL dataset',
+        description='Perturb MULTILINGUAL dataset by altering POS-tagged data')
     parser.add_argument('perturbation_type',
+                        type = str,
                         default='all',
                         const='all',
                         nargs='?',
-                        choices=PERTURBATIONS.keys(),
-                        help='Perturbation function used to transform BabyLM dataset')
+                        choices=FUNCTION_MAP.keys(),
+                        help='Perturbation function used to transform MULTILINGUAL dataset')
     parser.add_argument('lang',
                         default='all',
                         const='all',
                         nargs='?',
                         choices=EXP_LANGS,
-                        help='BabyLM dataset choice')
+                        help='MULTILINGUAL dataset choice')
 
     parser.add_argument('split',
                         default='all',
                         const='all',
                         nargs='?',
                         choices=['train', 'dev', 'test'],
-                        help='BabyLM dataset choice')
+                        help='MULTILINGUAL dataset choice')
     # Get args
     args = parser.parse_args()
 
     # Load dataset (only json files containing tagged data)
-    babylm_dataset = args.lang
-    babylm_split = args.split
+    multilingual_dataset = args.lang
+    multilingual_split = args.split
     json_ext = ".json"
-    babylm_data = glob(f"{BABYLM_DATA_PATH}/{babylm_dataset}/{babylm_split}/*{json_ext}")
-    print(f"{BABYLM_DATA_PATH}/{babylm_dataset}/{babylm_split}/*{json_ext}")
+    language_lower = args.lang.lower()
+    PERTURBATIONS = get_perturbations(args.lang, args.perturbation_type)
+
+    multilingual_data = glob(f"{MULTILINGUAL_DATA_PATH}/{multilingual_dataset}/{multilingual_split}/*{json_ext}")
+    print(f"{MULTILINGUAL_DATA_PATH}/{multilingual_dataset}/{multilingual_split}/*{json_ext}")
     # Get perturbation, affect, and filter functions
-    perturbation_function = PERTURBATIONS[args.perturbation_type]['perturbation_function']
-    affect_function = PERTURBATIONS[args.perturbation_type]['affect_function']
-    filter_function = PERTURBATIONS[args.perturbation_type]['filter_function']
-    gpt2_tokenizer = PERTURBATIONS[args.perturbation_type]['gpt2_tokenizer']
+    perturbation_function = PERTURBATIONS[f'{args.perturbation_type}_{language_lower}']['perturbation_function']
+    affect_function = PERTURBATIONS[f'{args.perturbation_type}_{language_lower}']['affect_function']
+    filter_function = PERTURBATIONS[f'{args.perturbation_type}_{language_lower}']['filter_function']
+    gpt2_tokenizer = PERTURBATIONS[f'{args.perturbation_type}_{language_lower}']['gpt2_tokenizer']
     lang = args.lang
     print(gpt2_tokenizer)
     print(f'token id of end of text: ')
     print(gpt2_tokenizer.encode('<|endoftext|>'))
     print(len(gpt2_tokenizer))
-    if babylm_split == "test":
+    if multilingual_split == "test":
 
         # Iterate over files and do transform
-        for file in babylm_data:
+        for file in multilingual_data:
             print(file)
             f = open(file)
             data = json.load(f)
@@ -291,14 +296,14 @@ if __name__ == "__main__":
                 file).replace(json_ext, "_unaffected_sents.test")
 
             # Create directory
-            data_write_directory = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed"
-            directory_affected = f"{data_write_directory}/{args.perturbation_type}/test_affected/"
+            data_write_directory = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed"
+            directory_affected = f"{data_write_directory}/{args.perturbation_type}_{language_lower}/test_affected/"
             if not os.path.exists(directory_affected):
                 os.makedirs(directory_affected)
-            directory_unaffected = f"{data_write_directory}/{args.perturbation_type}/test_unaffected/"
+            directory_unaffected = f"{data_write_directory}/{args.perturbation_type}_{language_lower}/test_unaffected/"
             if not os.path.exists(directory_unaffected):
                 os.makedirs(directory_unaffected)
-            directory_unaffected_sents = f"{data_write_directory}/{args.perturbation_type}/test_unaffected_sents/"
+            directory_unaffected_sents = f"{data_write_directory}/{args.perturbation_type}_{language_lower}/test_unaffected_sents/"
             if not os.path.exists(directory_unaffected_sents):
                 os.makedirs(directory_unaffected_sents)
 
@@ -312,7 +317,7 @@ if __name__ == "__main__":
 
     else:
         # Iterate over files and do transform
-        for file in babylm_data:
+        for file in multilingual_data:
             print(file)
             f = open(file)
             data = json.load(f)
@@ -333,9 +338,9 @@ if __name__ == "__main__":
             new_lines = new_lines_unaffected + new_lines_affected
 
             # Name new file
-            if babylm_split == "dev":
+            if multilingual_split == "dev":
                 new_file = os.path.basename(file).replace(json_ext, ".dev")
-            elif babylm_split == 'unittest':
+            elif multilingual_split == 'unittest':
                 new_file = os.path.basename(file).replace(json_ext, ".test")
 
                 # Print strings for unittest
@@ -351,7 +356,7 @@ if __name__ == "__main__":
                 new_file = os.path.basename(file).replace(json_ext, ".train")
 
             # Create directory and write file
-            directory = f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/{args.perturbation_type}/{babylm_split}/"
+            directory = f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/{args.perturbation_type}_{language_lower}/{multilingual_split}/"
             if not os.path.exists(directory):
                 os.makedirs(directory)
             write_file(directory, new_file, new_lines)

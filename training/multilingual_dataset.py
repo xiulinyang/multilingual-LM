@@ -8,6 +8,8 @@ import tqdm
 from numpy.random import default_rng
 from itertools import product
 
+from mistral.tests.test_eval_loss_is_defined import TRAIN_ARGS
+
 logger = datasets.logging.get_logger(__name__)
 
 _DESCRIPTION = """\
@@ -15,9 +17,19 @@ _DESCRIPTION = """\
 """
 _ROOT_PATH = 'local/xiulyang'
 _PERTURBED_DATA_PATH = f"/{_ROOT_PATH}/mission-impossible-language-models/data/multilingual/multilingual_data_perturbed"
-_PERTURBATIONS = ["shuffle_control_tr","shuffle_control_de","shuffle_control_en","shuffle_control_ru", "shuffle_control_ro"]
+_FUNCTIONS = [
+    "shuffle_local3",
+    "shuffle_local5",
+    "shuffle_local10",
+    "shuffle_deterministic21",
+    "shuffle_deterministic57",
+    "shuffle_deterministic84",
+    "shuffle_nondeterministic",
+    "shuffle_even_odd",
+]
+_TRAIN_SETS = ["DE","TR","RU","RO","AR","NL","ZH","PL","PT","FR","IT","EN"]
+_PERTURBATIONS = [f"{p}_{lang}" for p in _FUNCTIONS for lang in _TRAIN_SETS]
 _RANDOM_SEEDS = [41,53,81]
-_TRAIN_SETS = ["DE","TR","RU", "RO", "EN"]
 _EOS_TOKEN_ID = 0
 
 
