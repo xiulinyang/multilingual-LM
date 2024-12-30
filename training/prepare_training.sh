@@ -16,7 +16,7 @@ echo "Paren pretrained model: $4"
 NO_POS_ENCODINGS=${5:-''}
 echo "No pos encodings: $NO_POS_ENCODINGS"
 echo "Mistral path: $MISTRAL_PATH"
-LOWERCASE={$2,,}
+LOWERCASE=${2,,}
 echo "lowercased: ${LOWERCASE}"
 if [ -z "$NO_POS_ENCODINGS" ]
 then
