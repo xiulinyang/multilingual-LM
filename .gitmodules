@@ -1,3 +1,6 @@
 [submodule "mustral"]
 	path = mustral
 	url = https://github.com/xiulinyang/mistral
+[submodule "mistral"]
+	path = mistral
+	url = https://github.com/xiulinyang/mistral.git
