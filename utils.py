@@ -34,8 +34,8 @@ GENRES = {
 }
 CHECKPOINT_WRITE_PATH = f"/{ROOT_PATH}/multilingual_models"
 CHECKPOINT_READ_PATH = f"/{ROOT_PATH}/multilingual_models"
-TOKENIZER_PATH = f"/{ROOT_PATH}/mission-impossible-language-models/tokenizers"
-MULTILINGUAL_DATA_PATH = f"/{ROOT_PATH}/mission-impossible-language-models/data/multilingual/"
+TOKENIZER_PATH = f"/{ROOT_PATH}/multilingual-LM/tokenizers"
+MULTILINGUAL_DATA_PATH = f"/{ROOT_PATH}/multilingual-LM/data/multilingual/"
 MARKER_HOP_SING = "🅂"
 MARKER_HOP_PLUR = "🄿"
 MARKER_REV = "🅁"
@@ -164,7 +164,7 @@ def __perturb_hop_words_complete_hops(sent, num_hops, marker_sg, marker_pl, lang
 
     word_annotations = sent["word_annotations"].copy()
     word_annotations.reverse()
-    tokenizer = TOKENIZATIONER[lang]['hop']
+    tokenizer = TOKENIZER[lang]['hop']
     hop_completed = []
     new_sent = []
     for word in word_annotations:
@@ -231,7 +231,7 @@ def __perturb_hop_tokens(sent, num_hops, lang):
 
     word_annotations = sent["word_annotations"].copy()
     word_annotations.reverse()
-    tokenizer = TOKENIZATIONER[lang]['hop']
+    tokenizer = TOKENIZER[lang]['hop']
     new_sent = deque()
     tokens = []
     for word in word_annotations:
@@ -273,7 +273,7 @@ def __perturb_hop_tokens(sent, num_hops, lang):
 
 
 def __perturb_reverse(sent, rng, reverse, full, lang):
-    tokenizer = TOKENIZATIONER[lang]['reverse']
+    tokenizer = TOKENIZER[lang]['reverse']
     # Get sentence text and GPT-2 tokens
     tokens = tokenizer.encode(sent["sent_text"])
 
@@ -296,7 +296,7 @@ def __perturb_reverse(sent, rng, reverse, full, lang):
 
 def __perturb_shuffle_deterministic(sent, seed, shuffle, lang):
     # Get sentence text and GPT-2 tokens
-    tokenizer = TOKENIZATIONER[lang]['shuffle']
+    tokenizer = TOKENIZER[lang]['shuffle']
     if lang=='ZH':
         sent_text = ''.join(sent["sent_text"].split())
         tokens = tokenizer.encode(sent_text)
@@ -307,7 +307,7 @@ def __perturb_shuffle_deterministic(sent, seed, shuffle, lang):
     return tokens
 
 def __perturb_shuffle_deterministic_word(sent, seed, shuffle, lang):
-    tokenizer = TOKENIZATIONER[lang]['shuffle']
+    tokenizer = TOKENIZER[lang]['shuffle']
     tokens = sent["sent_text"].split()
     if shuffle:
         default_rng(seed).shuffle(tokens)
@@ -317,7 +317,7 @@ def __perturb_shuffle_deterministic_word(sent, seed, shuffle, lang):
 
 def __perturb_shuffle_nondeterministic(sent, rng, lang):
     # Get sentence text and GPT-2 tokens
-    tokenizer = TOKENIZATIONER[lang]['shuffle']
+    tokenizer = TOKENIZER[lang]['shuffle']
     tokens = tokenizer.encode(sent["sent_text"])
     rng.shuffle(tokens)
     return tokens
@@ -325,7 +325,7 @@ def __perturb_shuffle_nondeterministic(sent, rng, lang):
 
 def __perturb_shuffle_local(sent, seed, lang, window=5):
     # Get sentence text and GPT-2 tokens
-    tokenizer = TOKENIZATIONER[lang]['shuffle']
+    tokenizer = TOKENIZER[lang]['shuffle']
     if lang =='ZH':
         sent_text = ''.join(sent['sent_text'].split())
         tokens = tokenizer.encode(sent_text)
@@ -343,7 +343,7 @@ def __perturb_shuffle_local(sent, seed, lang, window=5):
 
 
 def __perturb_shuffle_local_word(sent, seed, lang, window=5):
-    tokenizer = TOKENIZATIONER[lang]['shuffle']
+    tokenizer = TOKENIZER[lang]['shuffle']
     tokens = sent['sent_text'].split()
 
     shuffled_tokens = []
@@ -356,7 +356,7 @@ def __perturb_shuffle_local_word(sent, seed, lang, window=5):
 
 def __perturb_shuffle_even_odd(sent, lang):
     # Get sentence text and GPT-2 tokens
-    tokenizer = TOKENIZATIONER[lang]['shuffle']
+    tokenizer = TOKENIZER[lang]['shuffle']
     tokens = tokenizer.encode(sent["sent_text"])
     even = [tok for i, tok in enumerate(tokens) if i % 2 == 0]
     odd = [tok for i, tok in enumerate(tokens) if i % 2 != 0]
@@ -410,7 +410,7 @@ def filter_reverse(sent,lang):
 
 
 def filter_shuffle(sent, lang):
-    tokenizer = TOKENIZATIONER[lang]['shuffle']
+    tokenizer = TOKENIZER[lang]['shuffle']
     tokens = tokenizer.encode(sent["sent_text"])
     return len(tokens) > 1 and len(tokens) <= 350
 
@@ -561,7 +561,7 @@ def get_perturbations(lang, function):
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
-            "gpt2_tokenizer": TOKENIZATIONER[lang_name]['shuffle'],
+            "gpt2_tokenizer": TOKENIZER[lang_name]['shuffle'],
         }}
     elif 'shuffle_deterministic' in function:
         return {
@@ -570,7 +570,7 @@ def get_perturbations(lang, function):
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
-            "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
         }}
     elif 'shuffle_control' in function:
         return {
@@ -581,7 +581,7 @@ def get_perturbations(lang, function):
                 "lang": lang_name,
                 "affect_function": affect_shuffle,
                 "filter_function": filter_shuffle,
-                "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+                "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
             }}
     elif 'shuffle_even_odd' in function:
         return {
@@ -590,7 +590,7 @@ def get_perturbations(lang, function):
                 "lang": lang_name,
                 "affect_function": affect_shuffle,
                 "filter_function": filter_shuffle,
-                "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+                "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
             }}
 
     elif 'shuffle_nondeterministic' in function:
@@ -600,7 +600,7 @@ def get_perturbations(lang, function):
                 "lang": lang_name,
                 "affect_function": affect_shuffle,
                 "filter_function": filter_shuffle,
-                "gpt2_tokenizer": TOKENIZATIONER[lang]['shuffle'],
+                "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
             }}
 
     else:
