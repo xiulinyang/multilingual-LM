@@ -66,7 +66,6 @@ if __name__ == "__main__":
     # Fill model template
     tokenizer = PERTURBATIONS[f'{args.perturbation_type}_{language}']["gpt2_tokenizer"]
     print(tokenizer)
-    print(vocab_size)
     model_template = Template("".join(lines))
     model_conf = model_template.render(
         perturbation=f'{args.perturbation_type}_{language}',
