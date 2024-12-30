@@ -8,8 +8,6 @@ import tqdm
 from numpy.random import default_rng
 from itertools import product
 
-from mistral.tests.test_eval_loss_is_defined import TRAIN_ARGS
-
 logger = datasets.logging.get_logger(__name__)
 
 _DESCRIPTION = """\
