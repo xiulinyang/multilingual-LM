@@ -5,6 +5,7 @@ LANGUAGE=$1
 GPU=$2
 PERTURB=$3
 RANDOM=$4
+
 # Default value if no argument is provided
 if [ -z "$LANGUAGE" ]; then
 	  echo "No language specified. Using 'EN' as default."
@@ -19,14 +20,14 @@ rm -rf ${PERTURB}_${LANGUAGE,,}/
 cd ..
 cd ..
 
-python perturb.py ${PERTURB} $LANGUAGE train
-python perturb.py ${PERTURB} $LANGUAGE dev
-python perturb.py ${PERTURB} $LANGUAGE test
+#python perturb.py ${PERTURB} $LANGUAGE train
+#python perturb.py ${PERTURB} $LANGUAGE dev
+#python perturb.py ${PERTURB} $LANGUAGE test
 
 cd ..
 cd training
 
-bash prepare_training.sh ${PERTURB} $LANGUAGE $RANDOM randinit
+bash prepare_training.sh ${PERTURB} ${LANGUAGE} ${RANDOM} randinit
 
 cd ..
 cd mistral
