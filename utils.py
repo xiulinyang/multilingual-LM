@@ -561,7 +561,7 @@ def get_perturbations(lang, function):
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
-            "gpt2_tokenizer": TOKENIZER[lang_name]['shuffle'],
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
         }}
     elif 'shuffle_deterministic' in function:
         return {
