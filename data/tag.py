@@ -72,14 +72,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # Init Stanza NLP tools
     nlp1 = stanza.Pipeline(
-        lang=args.language,
+        lang=args.language.lower(),
         processors='tokenize, pos, lemma',
         package="default_accurate",
         use_gpu=True)
 
     # If constituency parse is needed, init second Stanza parser
     if args.parse:
-        nlp2 = stanza.Pipeline(lang=args.language,
+        nlp2 = stanza.Pipeline(lang=args.language.lower(),
                                processors='tokenize,pos,constituency',
                                package="default_accurate",
                                use_gpu=True)
