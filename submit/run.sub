@@ -1,0 +1,21 @@
+# HTCondor submit description file
+# Everything with a leading # is a comment
+
+universe                = vanilla
+initialdir              = /scratch/<username>/<projdir>
+executable              = /scratch/<username>/<projdir>/submit/exe.sh
+output                  = /scratch/<username>/<projdir>/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+error                   = /scratch/<username>/<projdir>/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+log                     = /scratch/<username>/<projdir>/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).log
+request_CPUs            = 8
+request_memory          = 30G
+request_GPUs            = 1
+requirements            = (GPUs_GlobalMemoryMb >= 30000)
+
+getenv                  = True
++WantGPUHomeMounted     = true
+
+queue 1
+
+# go to docker hub and get your docker image or else build from scratch: 
+# https://hub.docker.com/r/huggingface/transformers-pytorch-gpu
