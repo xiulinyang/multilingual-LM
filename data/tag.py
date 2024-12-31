@@ -154,4 +154,4 @@ if __name__ == "__main__":
         ext = '_parsed.json' if args.parse else '.json'
         json_filename = os.path.splitext(file.name)[0] + ext
         with open(json_filename, "w") as outfile:
-            json.dump(line_annotations, outfile, indent=4)
+            json.dump(line_annotations, outfile,ensure_ascii=False, indent=4)
