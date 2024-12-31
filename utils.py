@@ -557,7 +557,7 @@ def get_perturbations(lang, function):
     function_name = function+'_'+lang_name
     if 'shuffle_local' in function:
         return {function_name: {
-            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, window=FUNCTION_MAP[function]['window']),
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang,seed=0,  window=FUNCTION_MAP[function]['window']),
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
