@@ -2,7 +2,7 @@
 # prepare_training.sh
 # author: Julie Kallini
 
-readonly MISTRAL_PATH=/local/xiulyang/multilingual-LM/mistral
+readonly MISTRAL_PATH=/scratch/xiulyang/multilingual-LM/mistral
 
 echo "
 -------------------------------------------------------------------------------

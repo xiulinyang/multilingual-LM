@@ -13,7 +13,7 @@ logger = datasets.logging.get_logger(__name__)
 _DESCRIPTION = """\
     Pre-tokenized BabyLM HuggingFace dataset for verb perturbations.
 """
-_ROOT_PATH = 'local/xiulyang'
+_ROOT_PATH = 'scratch/xiulyang'
 _PERTURBED_DATA_PATH = f"/{_ROOT_PATH}/multilingual-LM/data/multilingual/multilingual_data_perturbed"
 _FUNCTIONS = [
     "shuffle_local3",

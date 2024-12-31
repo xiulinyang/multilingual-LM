@@ -15,7 +15,7 @@ import torch
 ##############################################################################
 # CONSTANTS
 ##############################################################################
-ROOT_PATH = '/local/xiulyang'
+ROOT_PATH = '/scratch/xiulyang'
 EXP_LANGS = ['EN', 'DE', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR']
 MULTILINGUAL_SPLITS = ["train", 'dev', 'test', 'unittest']
 SEEDS = [21, 53, 84]

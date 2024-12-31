@@ -19,4 +19,4 @@ model:
     initial_weights: {{ paren_model_path }}
     
     # Configure Model From File
-    config_path:  /local/xiulyang/multilingual-LM/mistral/conf/models/gpt2-small-{{ lang }}.json
+    config_path:  /scratch/xiulyang/multilingual-LM/mistral/conf/models/gpt2-small-{{ lang }}.json

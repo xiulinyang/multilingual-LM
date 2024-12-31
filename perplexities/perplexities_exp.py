@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     # Get perturbed test files
     test_files = sorted(glob(
-        f"{BABYLM_DATA_PATH}/multilingual_data_perturbed/{args.test_perturbation_type}_{lang_lower_case}/test_affected/*"))
+        f"{MULTILINGUAL_DATA_PATH}/multilingual_data_perturbed/{args.test_perturbation_type}_{lang_lower_case}/test_affected/*"))
 
     #FILE_SAMPLE_SIZE = 1000
     rng = default_rng(args.random_seed)
