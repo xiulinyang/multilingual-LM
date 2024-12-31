@@ -66,19 +66,20 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--parse', action='store_true',
                         help="Include constituency parse")
     parser.add_argument('-b', '--batch_size', type=int)
+    parser.add_argument('-l', '--language', type=str)
+
     # Get args
     args = parser.parse_args()
-    stanza.download('fr')
     # Init Stanza NLP tools
     nlp1 = stanza.Pipeline(
-        lang='fr',
+        lang=args.language,
         processors='tokenize, pos, lemma',
         package="default_accurate",
         use_gpu=True)
 
     # If constituency parse is needed, init second Stanza parser
     if args.parse:
-        nlp2 = stanza.Pipeline(lang='fr',
+        nlp2 = stanza.Pipeline(lang=args.language,
                                processors='tokenize,pos,constituency',
                                package="default_accurate",
                                use_gpu=True)
