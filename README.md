@@ -4,7 +4,7 @@
 This repository is based on [mission-impossible-language-models](https://github.com/jkallini/mission-impossible-language-models).
 
 # Condor submit
-Use the submit/run.sub to submit. Replace <username>, <projdir>, <envname> and <wandbkey> in all files under submit/ with the correct name.
+Use the submit/run.sub to submit. Replace \<username\>, \<projdir\>, \<envname\> and \<wandbkey\> in all files under submit/ with correct names.
 
 # TODO List
 
