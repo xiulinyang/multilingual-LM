@@ -1,9 +1,9 @@
-# dataset_shuffle_deterministic21_nl_NL_seed53.yaml
+# dataset_shuffle_deterministic57_nl_NL_seed41.yaml
 #   Configuration for altered babylm-dataset
 ---
 dataset:
     id: /scratch/xiulyang/multilingual-LM/training/multilingual_dataset.py
-    name: shuffle_deterministic21_nl_NL_seed53
+    name: shuffle_deterministic57_nl_NL_seed41
     validation_ratio: null
 
     # Number of Preprocessing Workers

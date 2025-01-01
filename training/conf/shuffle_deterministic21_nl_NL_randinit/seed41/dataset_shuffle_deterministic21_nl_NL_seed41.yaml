@@ -2,7 +2,7 @@
 #   Configuration for altered babylm-dataset
 ---
 dataset:
-    id: /local/xiulyang/multilingual-LM/training/multilingual_dataset.py
+    id: /scratch/xiulyang/multilingual-LM/training/multilingual_dataset.py
     name: shuffle_deterministic21_nl_NL_seed41
     validation_ratio: null
 

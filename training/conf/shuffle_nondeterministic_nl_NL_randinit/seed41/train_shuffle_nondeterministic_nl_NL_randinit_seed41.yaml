@@ -1,14 +1,14 @@
-# train_shuffle_deterministic21_nl_NL_randinit_seed53.yaml
+# train_shuffle_nondeterministic_nl_NL_randinit_seed41.yaml
 #   Based on mistral-small.yaml.
 ---
 # Inherit Dataset, Tokenization, Model, and Training Details
 inherit:
-    - datasets/dataset_shuffle_deterministic21_nl_NL_seed53.yaml
-    - models/gpt2-small-shuffle_deterministic21_nl-randinit.yaml
+    - datasets/dataset_shuffle_nondeterministic_nl_NL_seed41.yaml
+    - models/gpt2-small-shuffle_nondeterministic_nl-randinit.yaml
     - trainers/gpt2-small.yaml
 
 # Run ID -- make sure to override!
-run_id: shuffle_deterministic21_nl_NL_randinit_seed53
+run_id: shuffle_nondeterministic_nl_NL_randinit_seed41
 
 # Weights & Biases
 wandb: xiulin-yang-compling
@@ -16,8 +16,8 @@ group: xiulin-yang
 
 # Artifacts & Caching
 artifacts:
-    cache_dir: //scratch/xiulyang/multilingual_models/shuffle_deterministic21_nl_NL_randinit/babylm_shuffle_deterministic21_nl_NL_randinit_seed53/artifacts
-    run_dir: //scratch/xiulyang/multilingual_models/shuffle_deterministic21_nl_NL_randinit/babylm_shuffle_deterministic21_nl_NL_randinit_seed53/runs
+    cache_dir: //scratch/xiulyang/multilingual_models/shuffle_nondeterministic_nl_NL_randinit/babylm_shuffle_nondeterministic_nl_NL_randinit_seed41/artifacts
+    run_dir: //scratch/xiulyang/multilingual_models/shuffle_nondeterministic_nl_NL_randinit/babylm_shuffle_nondeterministic_nl_NL_randinit_seed41/runs
 
 # Save Effective Batch Size for Easy Handling ==> Main Code asserts infra + training_config results in this!
 effective_bsz: 512
@@ -46,4 +46,4 @@ world_size: -1
 log_level: 20
 
 # Random Seed
-seed: 53
+seed: 41

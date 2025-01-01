@@ -16,8 +16,8 @@ group: xiulin-yang
 
 # Artifacts & Caching
 artifacts:
-    cache_dir: //local/xiulyang/multilingual_models/shuffle_deterministic21_nl_NL_randinit/babylm_shuffle_deterministic21_nl_NL_randinit_seed41/artifacts
-    run_dir: //local/xiulyang/multilingual_models/shuffle_deterministic21_nl_NL_randinit/babylm_shuffle_deterministic21_nl_NL_randinit_seed41/runs
+    cache_dir: //scratch/xiulyang/multilingual_models/shuffle_deterministic21_nl_NL_randinit/babylm_shuffle_deterministic21_nl_NL_randinit_seed41/artifacts
+    run_dir: //scratch/xiulyang/multilingual_models/shuffle_deterministic21_nl_NL_randinit/babylm_shuffle_deterministic21_nl_NL_randinit_seed41/runs
 
 # Save Effective Batch Size for Easy Handling ==> Main Code asserts infra + training_config results in this!
 effective_bsz: 512
