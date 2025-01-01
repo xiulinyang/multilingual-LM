@@ -118,7 +118,7 @@ if __name__ == "__main__":
     gpt2_tokenizer = TOKENIZER[la]['shuffle']
     # Get path to model
     model = f"{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}_seed{args.random_seed}"
-    model_path = f"{CHECKPOINT_READ_PATH}/{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}/{model}/runs/{model}/checkpoint-"
+    model_path = f"{CHECKPOINT_READ_PATH}/{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}/babylm_{model}/runs/{model}/checkpoint-"
 
     # Get perturbed test files
     test_files = sorted(glob(
