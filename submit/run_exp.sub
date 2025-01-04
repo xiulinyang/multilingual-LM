@@ -1,0 +1,22 @@
+# HTCondor submit description file
+# Everything with a leading # is a comment
+
+universe                = vanilla
+initialdir              = /scratch/xiulyang/multilingual-LM
+executable              = /scratch/xiulyang/multilingual-LM/submit/run_exp.sh
+arguments               = RU shuffle_deterministic21 53  shuff 1
+output                  = /scratch/xiulyang/multilingual-LM/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+error                   = /scratch/xiulyang/multilingual-LM/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+log                     = /scratch/xiulyang/multilingual-LM/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).log
+request_CPUs            = 8
+request_memory          = 50G
+request_GPUs            = 1
+requirements            = (GPUs_GlobalMemoryMb >= 30000)
+
+getenv                  = True
++WantGPUHomeMounted     = true
+
+queue 1
+
+# go to docker hub and get your docker image or else build from scratch: 
+# https://hub.docker.com/r/huggingface/transformers-pytorch-gpu
