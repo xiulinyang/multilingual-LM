@@ -539,6 +539,7 @@ TOKENIZER = {
 
 
 FUNCTION_MAP = {
+    'shuffle_local_word': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 3}, 
     'shuffle_control': {'function': perturb_shuffle_deterministic,'seed': None, 'shuffle': False},
     'shuffle_local3': {'function':perturb_shuffle_local,'seed': None,  'window': 3},
     'shuffle_local5': {'function':perturb_shuffle_local,'seed': None,  'window': 5},
