@@ -539,7 +539,9 @@ TOKENIZER = {
 
 
 FUNCTION_MAP = {
-    'shuffle_local_word': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 3}, 
+    'shuffle_local_word3': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 3},
+    'shuffle_local_word5': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 5},
+    'shuffle_local_word10': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 10},
     'shuffle_control': {'function': perturb_shuffle_deterministic,'seed': None, 'shuffle': False},
     'shuffle_local3': {'function':perturb_shuffle_local,'seed': None,  'window': 3},
     'shuffle_local5': {'function':perturb_shuffle_local,'seed': None,  'window': 5},
@@ -556,7 +558,16 @@ FUNCTION_MAP = {
 def get_perturbations(lang, function):
     lang_name = lang.lower()
     function_name = function+'_'+lang_name
-    if 'shuffle_local' in function:
+    if 'shuffle_local_word' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seed=0,
+                                             window=FUNCTION_MAP[function]['window']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
+        }}
+    elif 'shuffle_local' in function:
         return {function_name: {
             "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang,seed=0,  window=FUNCTION_MAP[function]['window']),
             "lang": lang_name,
