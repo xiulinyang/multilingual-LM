@@ -24,6 +24,8 @@ _FUNCTIONS = [
     "shuffle_deterministic84",
     "shuffle_nondeterministic",
     "shuffle_even_odd",
+    "shuffle_local3_word",
+    "shuffle_deterministic21_word"
 ]
 _TRAIN_SETS = ["DE","TR","RU","RO","AR","NL","ZH","PL","PT","FR","IT","EN"]
 _PERTURBATIONS = [f"{p}_{lang.lower()}" for p in _FUNCTIONS for lang in _TRAIN_SETS]
