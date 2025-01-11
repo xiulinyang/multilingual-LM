@@ -16,7 +16,7 @@ import torch
 # CONSTANTS
 ##############################################################################
 ROOT_PATH = '/scratch/xiulyang'
-EXP_LANGS = ['EN', 'DE', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR']
+EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR']
 MULTILINGUAL_SPLITS = ["train", 'dev', 'test', 'unittest']
 SEEDS = [21, 53, 84]
 CHECKPOINTS = list(range(50, 501, 50))
@@ -306,6 +306,13 @@ def __perturb_shuffle_deterministic(sent, seed, shuffle, lang):
         default_rng(seed).shuffle(tokens)
     return tokens
 
+
+def __perturb_remove_fw(sent,lang):
+    tokenizer = TOKENIZER[lang]['shuffle']
+    sent_text = ' '.join([x['text'] for x in sent['word_annotations'] if x['upos'] not in ['DET', 'AUX', 'ADP', 'SCONJ', 'PART','CCONJ']])
+    tokens = tokenizer.encode(sent_text)
+    return tokens
+
 def __perturb_shuffle_deterministic_word(sent, seed, shuffle, lang):
     tokenizer = TOKENIZER[lang]['shuffle']
     tokens = sent["sent_text"].split()
@@ -313,6 +320,7 @@ def __perturb_shuffle_deterministic_word(sent, seed, shuffle, lang):
         default_rng(seed).shuffle(tokens)
         tokens = tokenizer.encode(' '.join(tokens))
     return tokens
+
 
 
 def __perturb_shuffle_nondeterministic(sent, rng, lang):
@@ -464,6 +472,10 @@ def perturb_shuffle_local_word(sent, seed, window, lang):
 def perturb_shuffle_even_odd(sent, lang):
     return __perturb_shuffle_even_odd(sent, lang)
 
+def perturb_shuffle_remove_fw(sent, lang):
+    return __perturb_remove_fw(sent, lang)
+
+
 TOKENIZER_DICT = {
        "EN": "gpt2",
        "DE": "dbmdz/german-gpt2",
@@ -484,7 +496,7 @@ def test_tokenizer(tokenizer):
     print(tokenizer.encode('<|endoftext|>'))
 
 
-gpt2_tokenizer_de = get_gpt2_tokenizer_with_markers([], 'DE') 
+gpt2_tokenizer_de = get_gpt2_tokenizer_with_markers([], 'DE')
 gpt2_tokenizer_en = get_gpt2_tokenizer_with_markers([],'EN')
 gpt2_tokenizer_tr = get_gpt2_tokenizer_with_markers([],'TR')
 gpt2_tokenizer_ru = get_gpt2_tokenizer_with_markers([], 'RU')
@@ -539,6 +551,7 @@ TOKENIZER = {
 
 
 FUNCTION_MAP = {
+    'shuffle_remove_fw':{'function': perturb_shuffle_remove_fw, 'seed': None, 'shuffle': False},
     'shuffle_local_word3': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 3},
     'shuffle_local_word5': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 5},
     'shuffle_local_word10': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 10},
@@ -562,6 +575,14 @@ def get_perturbations(lang, function):
         return {function_name: {
             "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seed=0,
                                              window=FUNCTION_MAP[function]['window']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
+        }}
+    elif 'shuffle_remove_fw' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang),
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
