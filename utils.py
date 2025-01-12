@@ -307,11 +307,7 @@ def __perturb_shuffle_deterministic(sent, seed, shuffle, lang):
     return tokens
 
 
-def __perturb_remove_fw(sent,lang):
-    tokenizer = TOKENIZER[lang]['shuffle']
-    sent_text = ' '.join([x['text'] for x in sent['word_annotations'] if x['upos'] not in ['DET', 'AUX', 'ADP', 'SCONJ', 'PART','CCONJ']])
-    tokens = tokenizer.encode(sent_text)
-    return tokens
+
 
 def __perturb_shuffle_deterministic_word(sent, seed, shuffle, lang):
     tokenizer = TOKENIZER[lang]['shuffle']
@@ -370,7 +366,45 @@ def __perturb_shuffle_even_odd(sent, lang):
     odd = [tok for i, tok in enumerate(tokens) if i % 2 != 0]
     return even + odd
 
+def longest_continuous_span(nums, target):
+    if target not in nums:
+        return []
+    nums = sorted(nums)
+    current_span = []
+    all_spans = []
+    for num in nums:
+        if not current_span or num == current_span[-1] + 1:
+            current_span.append(num)
+        else:
+            current_span = [num]
+        all_spans.append(current_span)
+    return [x for x in all_spans if target==x[-1]][-1]
 
+def __perturb_adj_num(sent, lang, post='ADJ'):
+    tokenizer = TOKENIZER[lang]['shuffle']
+    sent_pos = [x['upos'] for x in sent['word_annotations']]
+    sent_toks = [x['text'] for x in sent['word_annotations']]
+    sent_toks_copy = [x['text'] for x in sent['word_annotations']]
+    adj_pos = [x for x, y in enumerate(sent_pos) if y==post]
+    for i, pos in enumerate(sent_pos):
+        if pos in ['NOUN', 'X', 'SYM', 'PROPN']:
+            adj_indices = longest_continuous_span(adj_pos, i - 1)
+            if len(adj_indices)>1:
+                print(sent_toks)
+            if i - 1 in adj_indices:
+                len_adj = len(adj_indices)
+                sent_toks_copy[i-len_adj] = sent_toks[i]
+                sent_toks_copy[i-len_adj+1:i+1] = sent_toks[adj_indices[0]: adj_indices[-1]+1]
+    assert len(sent_toks_copy) == len(sent_toks)
+    tw = ' '.join(sent_toks_copy)
+    tokens = tokenizer.encode(tw)
+    return tokens
+
+def __perturb_remove_fw(sent,lang):
+    tokenizer = TOKENIZER[lang]['shuffle']
+    sent_text = ' '.join([x['text'] for x in sent['word_annotations'] if x['upos'] not in ['DET', 'AUX', 'ADP', 'SCONJ', 'PART','CCONJ']])
+    tokens = tokenizer.encode(sent_text)
+    return tokens
 ##############################################################################
 # AFFECT FUNCTIONS
 # These functions define when a perturbation has been applied to a sentence
@@ -475,6 +509,8 @@ def perturb_shuffle_even_odd(sent, lang):
 def perturb_shuffle_remove_fw(sent, lang):
     return __perturb_remove_fw(sent, lang)
 
+def perturb_adj_num(sent, lang, post):
+    return __perturb_adj_num(sent, lang, post)
 
 TOKENIZER_DICT = {
        "EN": "gpt2",
@@ -551,6 +587,8 @@ TOKENIZER = {
 
 
 FUNCTION_MAP = {
+    'perturb_adj_num':{'function': perturb_adj_num, 'seed': None, 'shuffle': False, 'post':'NUM'},
+    'perturb_num_adj':{'function': perturb_adj_num, 'seed': None, 'shuffle': False, 'post':'ADJ'},
     'shuffle_remove_fw':{'function': perturb_shuffle_remove_fw, 'seed': None, 'shuffle': False},
     'shuffle_local_word3': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 3},
     'shuffle_local_word5': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 5},
@@ -575,6 +613,22 @@ def get_perturbations(lang, function):
         return {function_name: {
             "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seed=0,
                                              window=FUNCTION_MAP[function]['window']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
+        }}
+    elif 'perturb_adj_num' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, post=FUNCTION_MAP[function]['post']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
+        }}
+    elif 'perturb_num_adj' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, post=FUNCTION_MAP[function]['post']),
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
