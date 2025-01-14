@@ -293,6 +293,25 @@ def __perturb_reverse(sent, rng, reverse, full, lang):
 
     return new_tokens
 
+def __perturb_reverse_full(sent, lang):
+    tokenizer = TOKENIZER[lang]['shuffle']
+    if lang=='ZH':
+        sent_text = ''.join(sent["sent_text"].split())
+        tokens = tokenizer.encode(sent_text)
+    else:
+        tokens = tokenizer.encode(sent["sent_text"])
+    return tokens.reverse
+
+def __perturb_reverse_full_word(sent, lang):
+    tokenizer = TOKENIZER[lang]['shuffle']
+    sent_words = sent["sent_text"].split().reverse()
+    if lang=='ZH':
+        sent_text = ''.join(sent_words)
+        tokens = tokenizer.encode(sent_text)
+    else:
+        tokens = tokenizer.encode(sent_words)
+    return tokens.reverse
+
 
 def __perturb_shuffle_deterministic(sent, seed, shuffle, lang):
     # Get sentence text and GPT-2 tokens
@@ -306,7 +325,17 @@ def __perturb_shuffle_deterministic(sent, seed, shuffle, lang):
         default_rng(seed).shuffle(tokens)
     return tokens
 
-
+def __perturb_shuffle_deterministic_full(sent, seed, shuffle, lang):
+    # Get sentence text and GPT-2 tokens
+    tokenizer = TOKENIZER[lang]['shuffle']
+    if lang=='ZH':
+        sent_text = ''.join(sent["sent_text"].split())
+        tokens = tokenizer.encode(sent_text)
+    else:
+        tokens = tokenizer.encode(sent["sent_text"])
+    if shuffle:
+        default_rng(seed).shuffle(tokens)
+    return tokens
 
 
 def __perturb_shuffle_deterministic_word(sent, seed, shuffle, lang):
@@ -503,6 +532,13 @@ def perturb_shuffle_local_word(sent, seed, window, lang):
     return __perturb_shuffle_local_word(sent, seed, lang, window)
 
 
+def perturb_reverse_full(sent, lang):
+    return __perturb_reverse_full(sent, lang)
+
+def perturb_reverse_full_word(sent, lang):
+    return __perturb_reverse_full_word(sent, lang)
+
+
 def perturb_shuffle_even_odd(sent, lang):
     return __perturb_shuffle_even_odd(sent, lang)
 
@@ -522,8 +558,7 @@ TOKENIZER_DICT = {
        "NL": "yhavinga/gpt-neo-125M-dutch",
        "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
        "PL":"flax-community/papuGaPT2",
-       "ZH": "hfl/chinese-bert-wwm",
-        }
+       "ZH": "hfl/chinese-bert-wwm"}
 
 def test_tokenizer(tokenizer):
     print(tokenizer)
@@ -587,6 +622,8 @@ TOKENIZER = {
 
 
 FUNCTION_MAP = {
+    'perturb_reverse_full': {'function': perturb_reverse_full},
+    'perturb_reverse_full_word': {'function': perturb_reverse_full_word},
     'perturb_adj_num':{'function': perturb_adj_num, 'seed': None, 'shuffle': False, 'post':'NUM'},
     'perturb_num_adj':{'function': perturb_adj_num, 'seed': None, 'shuffle': False, 'post':'ADJ'},
     'shuffle_remove_fw':{'function': perturb_shuffle_remove_fw, 'seed': None, 'shuffle': False},
@@ -618,6 +655,22 @@ def get_perturbations(lang, function):
             "filter_function": filter_shuffle,
             "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],
         }}
+    elif 'perturb_reverse_full_word' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],}
+        }
+    elif 'perturb_reverse_full' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],}
+        }
     elif 'perturb_adj_num' in function:
         return {function_name: {
             "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, post=FUNCTION_MAP[function]['post']),
