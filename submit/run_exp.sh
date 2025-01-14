@@ -23,9 +23,10 @@ cd /scratch/xiulyang/multilingual-LM/
 LANG=$1
 PERT=$2
 SEED=$3
-PERT2=$4
-SEED2=$5
+LANG2=$4
+PERT2=$5
+SEED2=$6
 
 #run any commands here
 WANDB_API_KEY=3576739fd3c81c328720ae979b8a8b4106ef409c bash run.sh $1 $2 $3
-WANDB_API_KEY=3576739fd3c81c328720ae979b8a8b4106ef409c bash run.sh $1 $4 $5
+WANDB_API_KEY=3576739fd3c81c328720ae979b8a8b4106ef409c bash run.sh $4 $5 $6

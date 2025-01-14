@@ -4,12 +4,12 @@
 universe                = vanilla
 initialdir              = /scratch/xiulyang/multilingual-LM
 executable              = /scratch/xiulyang/multilingual-LM/submit/run_exp.sh
-arguments               = RU shuffle_deterministic21 53  shuff 1
+arguments               = EN perturb_reverse_full_word 81 EN perturb_reverse_full_word 41
 output                  = /scratch/xiulyang/multilingual-LM/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
 error                   = /scratch/xiulyang/multilingual-LM/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
 log                     = /scratch/xiulyang/multilingual-LM/logs/run.sh.$(ClusterId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).log
 request_CPUs            = 8
-request_memory          = 50G
+request_memory          = 45G
 request_GPUs            = 1
 requirements            = (GPUs_GlobalMemoryMb >= 30000)
 
