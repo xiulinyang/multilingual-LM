@@ -33,7 +33,8 @@ _FUNCTIONS = [
     "perturb_adj_num",
     "shuffle_control",
     "perturb_reverse_full_word",
-    "perturb_reverse_full"
+    "perturb_reverse_full",
+    "shuffle_local2"
 ]
 _TRAIN_SETS = ["DE","TR","RU","RO","AR","NL","ZH","PL","PT","FR","IT","EN"]
 _PERTURBATIONS = [f"{p}_{lang.lower()}" for p in _FUNCTIONS for lang in _TRAIN_SETS]

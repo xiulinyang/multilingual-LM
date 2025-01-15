@@ -369,7 +369,10 @@ def __perturb_shuffle_local(sent, seed, lang, window=5):
     shuffled_tokens = []
     for i in range(0, len(tokens), window):
         batch = tokens[i:i+window].copy()
-        default_rng(seed).shuffle(batch)
+        if window==2:
+            batch.reverse()
+        else:
+            default_rng(seed).shuffle(batch)
         shuffled_tokens += batch
 
     return shuffled_tokens
@@ -558,7 +561,8 @@ TOKENIZER_DICT = {
        "NL": "yhavinga/gpt-neo-125M-dutch",
        "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
        "PL":"flax-community/papuGaPT2",
-       "ZH": "hfl/chinese-bert-wwm"}
+       "ZH": "hfl/chinese-bert-wwm",
+        "AR": "aubmindlab/aragpt2-base"}
 
 def test_tokenizer(tokenizer):
     print(tokenizer)
