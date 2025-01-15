@@ -577,7 +577,7 @@ gpt2_tokenizer_nl = get_gpt2_tokenizer_with_markers([], 'NL')
 gpt2_tokenizer_pl = get_gpt2_tokenizer_with_markers([], 'PL')
 gpt2_tokenizer_it = get_gpt2_tokenizer_with_markers([], 'IT')
 gpt2_tokenizer_zh = get_gpt2_tokenizer_with_markers([], 'ZH')
-
+gpt2_tokenizer_ar = get_gpt2_tokenizer_with_markers([], 'AR')
 
 gpt2_hop_tokenizer_en = get_gpt2_tokenizer_with_markers(
            [MARKER_HOP_SING, MARKER_HOP_PLUR], 'EN')
@@ -631,6 +631,7 @@ FUNCTION_MAP = {
     'shuffle_local_word5': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 5},
     'shuffle_local_word10': {'function': perturb_shuffle_local_word, 'seed': None, 'window': 10},
     'shuffle_control': {'function': perturb_shuffle_deterministic,'seed': None, 'shuffle': False},
+    'shuffle_local2': {'function':perturb_shuffle_local,'seed': None,  'window': 2},
     'shuffle_local3': {'function':perturb_shuffle_local,'seed': None,  'window': 3},
     'shuffle_local5': {'function':perturb_shuffle_local,'seed': None,  'window': 5},
     'shuffle_local10': {'function':perturb_shuffle_local,'seed': None, 'window': 10},
