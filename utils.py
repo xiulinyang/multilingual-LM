@@ -562,7 +562,7 @@ TOKENIZER_DICT = {
        "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
        "PL":"flax-community/papuGaPT2",
        "ZH": "hfl/chinese-bert-wwm",
-        "AR": "aubmindlab/aragpt2-base"}
+    "AR": "aubmindlab/aragpt2-base"}
 
 def test_tokenizer(tokenizer):
     print(tokenizer)
@@ -622,6 +622,7 @@ TOKENIZER = {
 "IT":{"shuffle": gpt2_tokenizer_it},
 "ZH":{"shuffle": gpt2_tokenizer_zh},
 "PL":{"shuffle": gpt2_tokenizer_pl},
+'AR':{'shuffle': gpt2_tokenizer_ar},
 }
 
 
