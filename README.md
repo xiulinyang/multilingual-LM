@@ -11,7 +11,7 @@ Use the submit/run.sub to submit. Replace \<username\>, \<projdir\>, \<envname\>
 ## Experiment
 - [ ] EN shuffle_local2 41|53|81
 - [ ] AR shuffle_control|shuffle_local3|shuffle_local5|shuffle_local10|shuffle_deterministic21|shuffle_deterministic84|shuffle_deterministic57|shuffle_nondeterministic|shuffle_even_odd 41|53|81
-- [ ] PL shuffle_control|shuffle_local3|shuffle_local5|shuffle_local10|shuffle_deterministic21|shuffle_deterministic84|shuffle_deterministic57|shuffle_nondeterministic|shuffle_even_odd 41|53|81
+- [ ] PL shuffle_local3 (53) |shuffle_local5 (81)|shuffle_local10 (41,53) |shuffle_deterministic21|shuffle_deterministic84|shuffle_deterministic57|shuffle_nondeterministic| 41|53|81
 - [ ] FR shuffle_control|shuffle_local3|shuffle_local5|shuffle_local10|shuffle_deterministic21|shuffle_deterministic84|shuffle_deterministic57|shuffle_nondeterministic|shuffle_even_odd 41|53|81
 - [ ] EN perturb_adj_num 41|53|81 (Xiulin needs to upload data!!)
 
