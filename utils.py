@@ -557,7 +557,7 @@ TOKENIZER_DICT = {
        "RU": "sberbank-ai/rugpt3large_based_on_gpt2",
        "RO": "dumitrescustefan/gpt-neo-romanian-780m",
        "TR": "ytu-ce-cosmos/turkish-gpt2",
-       "FR": "Cedille/fr-boris",
+       "FR": "lightonai/pagnol-xl",
        "NL": "yhavinga/gpt-neo-125M-dutch",
        "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
        "PL":"flax-community/papuGaPT2",
