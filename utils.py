@@ -310,7 +310,7 @@ def __perturb_reverse_full_word(sent, lang):
         tokens = tokenizer.encode(sent_text)
     else:
         tokens = tokenizer.encode(sent_words)
-    return tokens.reverse
+    return tokens
 
 
 def __perturb_shuffle_deterministic(sent, seed, shuffle, lang):
