@@ -304,12 +304,13 @@ def __perturb_reverse_full(sent, lang):
 
 def __perturb_reverse_full_word(sent, lang):
     tokenizer = TOKENIZER[lang]['shuffle']
-    sent_words = sent["sent_text"].split().reverse()
+    sent_words = sent["sent_text"].split()
+    sent_words.reverse()
     if lang=='ZH':
         sent_text = ''.join(sent_words)
         tokens = tokenizer.encode(sent_text)
     else:
-        tokens = tokenizer.encode(sent_words)
+        tokens = tokenizer.encode(' '.join(sent_words))
     return tokens
 
 
@@ -663,7 +664,7 @@ def get_perturbations(lang, function):
         }}
     elif 'perturb_reverse_full_word' in function:
         return {function_name: {
-            "perturbation_function": partial(FUNCTION_MAP[function]['function']),
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang),
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
@@ -671,7 +672,7 @@ def get_perturbations(lang, function):
         }
     elif 'perturb_reverse_full' in function:
         return {function_name: {
-            "perturbation_function": partial(FUNCTION_MAP[function]['function']),
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang),
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
