@@ -33,6 +33,7 @@ _FUNCTIONS = [
     "perturb_adj_num",
     "shuffle_control",
     "perturb_reverse_full_word",
+    "perturb_np_num_det_adj",
     "perturb_reverse_full",
     "shuffle_local2"
 ]

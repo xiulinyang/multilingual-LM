@@ -4,7 +4,7 @@
 from collections import deque
 from string import punctuation
 from warnings import WarningMessage
-
+from nltk import Tree
 from transformers import AutoTokenizer, AddedToken,GPT2LMHeadModel, GPT2Tokenizer,AutoTokenizer, AutoModel
 from functools import partial
 from numpy.random import default_rng
@@ -152,6 +152,40 @@ def __perturb_hop_words(sent, num_hops, marker_sg, marker_pl,lang):
     perturbed_tokens, _ = __perturb_hop_words_complete_hops(
         sent, num_hops, marker_sg, marker_pl,lang)
     return perturbed_tokens
+
+def reorder_np(np_subtree):
+    desired = []
+    others = []
+    desired_order = ['NN', 'NNS', 'NNP', 'NNPS', 'QP', '$', 'CD', 'DT','PRP$', 'PDT', 'POS', 'RB', 'ADJP', 'JJR', 'JJS', 'JJ', ]
+    for child in np_subtree:
+        if hasattr(child, "label") and child.label() in desired_order:
+            desired.append(child)
+        else:
+            others.append(child)
+
+    sorted_desired = sorted(
+        desired,
+        key=lambda child: desired_order.index(child.label())
+    )
+    reordered_children = []
+    desired_iter = iter(sorted_desired)
+    for child in np_subtree:
+        if child in desired:
+            reordered_children.append(next(desired_iter))
+        else:
+            reordered_children.append(child)
+
+    np_subtree[:] = reordered_children
+
+def navigate_and_reorder_tree(t):
+    for subtree in t:
+        try:
+            if subtree.label() == 'NP':
+                reorder_np(subtree)
+            navigate_and_reorder_tree(subtree)
+        except AttributeError:
+            continue
+    return t
 
 
 def check_word_hops_completed(sent, lang, num_hops=4, marker=MARKER_HOP_SING):
@@ -301,6 +335,13 @@ def __perturb_reverse_full(sent, lang):
     else:
         tokens = tokenizer.encode(sent["sent_text"])
     return tokens.reverse
+
+def __perturb_np_num_det_adj(sent, lang):
+    tokenizer = TOKENIZER[lang]['shuffle']
+    tree = sent['constituency_parse']
+    t = Tree.fromstring(tree)
+    t = navigate_and_reorder_tree(t)
+    return tokenizer.encode(' '.join(t.leaves()))
 
 def __perturb_reverse_full_word(sent, lang):
     tokenizer = TOKENIZER[lang]['shuffle']
@@ -552,6 +593,10 @@ def perturb_shuffle_remove_fw(sent, lang):
 def perturb_adj_num(sent, lang, post):
     return __perturb_adj_num(sent, lang, post)
 
+def perturb_np_num_det_adj(sent, lang):
+    return __perturb_np_num_det_adj(sent, lang)
+
+
 TOKENIZER_DICT = {
        "EN": "gpt2",
        "DE": "dbmdz/german-gpt2",
@@ -628,6 +673,7 @@ TOKENIZER = {
 
 
 FUNCTION_MAP = {
+    'perturb_np_num_det_adj': {'function': perturb_np_num_det_adj},
     'perturb_reverse_full': {'function': perturb_reverse_full},
     'perturb_reverse_full_word': {'function': perturb_reverse_full_word},
     'perturb_adj_num':{'function': perturb_adj_num, 'seed': None, 'shuffle': False, 'post':'NUM'},
@@ -669,6 +715,14 @@ def get_perturbations(lang, function):
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
             "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],}
+        }
+    elif 'perturb_np_num_det_adj' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'], }
         }
     elif 'perturb_reverse_full' in function:
         return {function_name: {
