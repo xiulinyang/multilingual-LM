@@ -37,7 +37,7 @@ _FUNCTIONS = [
     "perturb_reverse_full",
     "shuffle_local2"
 ]
-_TRAIN_SETS = ["DE","TR","RU","RO","AR","NL","ZH","PL","PT","FR","IT","EN"]
+_TRAIN_SETS = ["DE","TR","RU","RO","AR","NL","ZH","PL","PT","FR","IT","EN","ENRN"]
 _PERTURBATIONS = [f"{p}_{lang.lower()}" for p in _FUNCTIONS for lang in _TRAIN_SETS]
 _RANDOM_SEEDS = [41,53,81]
 _EOS_TOKEN_ID = 0

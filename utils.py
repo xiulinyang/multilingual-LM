@@ -16,7 +16,7 @@ import torch
 # CONSTANTS
 ##############################################################################
 ROOT_PATH = '/scratch/xiulyang'
-EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR']
+EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ENRN']
 MULTILINGUAL_SPLITS = ["train", 'dev', 'test', 'unittest']
 SEEDS = [21, 53, 84]
 CHECKPOINTS = list(range(50, 501, 50))
@@ -598,6 +598,7 @@ def perturb_np_num_det_adj(sent, lang):
 
 
 TOKENIZER_DICT = {
+"ENRN": "gpt2",
        "EN": "gpt2",
        "DE": "dbmdz/german-gpt2",
        "RU": "sberbank-ai/rugpt3large_based_on_gpt2",
@@ -615,6 +616,7 @@ def test_tokenizer(tokenizer):
     print('a')
     print(len(tokenizer))
     print(tokenizer.encode('<|endoftext|>'))
+
 
 
 gpt2_tokenizer_de = get_gpt2_tokenizer_with_markers([], 'DE')
@@ -669,6 +671,7 @@ TOKENIZER = {
 "ZH":{"shuffle": gpt2_tokenizer_zh},
 "PL":{"shuffle": gpt2_tokenizer_pl},
 'AR':{'shuffle': gpt2_tokenizer_ar},
+'ENRN': {"shuffle": gpt2_tokenizer_en}
 }
 
 
