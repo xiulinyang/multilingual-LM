@@ -43,6 +43,10 @@ BOS_TOKEN = "<BOS_TOKEN>"
 PART_TOKENS = set(["n't", "'ll", "'s", "'re", "'ve", "'m"])
 PUNCT_TOKENS = set(punctuation)
 
+NPS = ['NN', 'NNS', 'NNP', 'NNPS']
+NUMP = ['QP', '$', 'CD']
+DP =[ 'DT', 'PRP$', 'PDT','POS']
+ADJP = ['RB', 'ADJP', 'JJR', 'JJS', 'JJ']
 
 ##############################################################################
 # PARENS MODELS (Structurally-pretrained)
@@ -153,10 +157,20 @@ def __perturb_hop_words(sent, num_hops, marker_sg, marker_pl,lang):
         sent, num_hops, marker_sg, marker_pl,lang)
     return perturbed_tokens
 
-def reorder_np(np_subtree):
+def reorder_np(np_subtree, sequence):
     desired = []
     others = []
-    desired_order = ['NN', 'NNS', 'NNP', 'NNPS', 'QP', '$', 'CD', 'DT','PRP$', 'PDT', 'POS', 'RB', 'ADJP', 'JJR', 'JJS', 'JJ', ]
+    if sequence =='dnna':
+        desired_order = DP+NUMP+NPS+ADJP
+    elif sequence == 'dann':
+        desired_order = DP+ADJP+NPS+NUMP
+    elif sequence =='nnda':
+        desired_order = NPS+NUMP+DP+ADJP
+    elif sequence =='annd':
+        desired_order = ADJP+NPS+NUMP+DP
+    else:
+        raise ValueError('The order is not available yet')
+    # desired_order = ['NN', 'NNS', 'NNP', 'NNPS', 'QP', '$', 'CD', 'DT','PRP$', 'PDT', 'POS', 'RB', 'ADJP', 'JJR', 'JJS', 'JJ', ]
     for child in np_subtree:
         if hasattr(child, "label") and child.label() in desired_order:
             desired.append(child)
@@ -177,12 +191,12 @@ def reorder_np(np_subtree):
 
     np_subtree[:] = reordered_children
 
-def navigate_and_reorder_tree(t):
+def navigate_and_reorder_tree(t, seq):
     for subtree in t:
         try:
             if subtree.label() == 'NP':
-                reorder_np(subtree)
-            navigate_and_reorder_tree(subtree)
+                reorder_np(subtree, seq)
+            navigate_and_reorder_tree(subtree, seq)
         except AttributeError:
             continue
     return t
@@ -336,11 +350,11 @@ def __perturb_reverse_full(sent, lang):
         tokens = tokenizer.encode(sent["sent_text"])
     return tokens.reverse
 
-def __perturb_np_num_det_adj(sent, lang):
+def __perturb_np_num_det_adj(sent, lang, seq):
     tokenizer = TOKENIZER[lang]['shuffle']
     tree = sent['constituency_parse']
     t = Tree.fromstring(tree)
-    t = navigate_and_reorder_tree(t)
+    t = navigate_and_reorder_tree(t, seq)
     return tokenizer.encode(' '.join(t.leaves()))
 
 def __perturb_reverse_full_word(sent, lang):
@@ -593,8 +607,8 @@ def perturb_shuffle_remove_fw(sent, lang):
 def perturb_adj_num(sent, lang, post):
     return __perturb_adj_num(sent, lang, post)
 
-def perturb_np_num_det_adj(sent, lang):
-    return __perturb_np_num_det_adj(sent, lang)
+def perturb_np_num_det_adj(sent, lang, seq):
+    return __perturb_np_num_det_adj(sent, lang, seq)
 
 
 TOKENIZER_DICT = {
@@ -676,7 +690,10 @@ TOKENIZER = {
 
 
 FUNCTION_MAP = {
-    'perturb_np_num_det_adj': {'function': perturb_np_num_det_adj},
+    'perturb_adj_num_np_det': {'function': perturb_np_num_det_adj, 'seq':'annd'},
+    'perturb_det_adj_np_num': {'function': perturb_np_num_det_adj, 'seq':'dann'},
+    'perturb_det_num_np_adj': {'function': perturb_np_num_det_adj, 'seq':'dnna'},
+    'perturb_np_num_det_adj': {'function': perturb_np_num_det_adj, 'seq':'nnda'},
     'perturb_reverse_full': {'function': perturb_reverse_full},
     'perturb_reverse_full_word': {'function': perturb_reverse_full_word},
     'perturb_adj_num':{'function': perturb_adj_num, 'seed': None, 'shuffle': False, 'post':'NUM'},
@@ -721,7 +738,31 @@ def get_perturbations(lang, function):
         }
     elif 'perturb_np_num_det_adj' in function:
         return {function_name: {
-            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang),
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'], }
+        }
+    elif 'perturb_adj_num_np_det' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'], }
+        }
+    elif 'perturb_det_num_np_adj' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'], }
+        }
+    elif 'perturb_det_adj_np_num' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
             "lang": lang_name,
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
