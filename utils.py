@@ -167,7 +167,7 @@ def reorder_np(np_subtree, sequence):
     elif sequence =='nnda':
         desired_order = NPS+NUMP+DP+ADJP
     elif sequence =='annd':
-        desired_order = ADJP+NPS+NUMP+DP
+        desired_order = ADJP+NUMP+NPS+DP
     else:
         raise ValueError('The order is not available yet')
     # desired_order = ['NN', 'NNS', 'NNP', 'NNPS', 'QP', '$', 'CD', 'DT','PRP$', 'PDT', 'POS', 'RB', 'ADJP', 'JJR', 'JJS', 'JJ', ]
