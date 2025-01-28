@@ -36,7 +36,6 @@ def create_attention_mask(token_lists):
 
 
 def create_input_ids(token_lists, pad_token_id):
-    pad_token_id=0
     padded = zip(*itertools.zip_longest(*token_lists, fillvalue=pad_token_id))
     return torch.tensor(list(padded))
 
