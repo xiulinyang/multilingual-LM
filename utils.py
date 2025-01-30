@@ -45,7 +45,7 @@ PUNCT_TOKENS = set(punctuation)
 
 NPS = ['NN', 'NNS', 'NNP', 'NNPS']
 NUMP = ['QP', '$', 'CD']
-DP =[ 'DT', 'PRP$', 'PDT','POS']
+DP =['DT', 'PRP$', 'PDT','POS']
 ADJP = ['RB', 'ADJP', 'JJR', 'JJS', 'JJ']
 
 ##############################################################################
@@ -168,6 +168,10 @@ def reorder_np(np_subtree, sequence):
         desired_order = NPS+NUMP+DP+ADJP
     elif sequence =='annd':
         desired_order = ADJP+NUMP+NPS+DP
+    elif sequence =='andn':
+        desired_order = ADJP+NUMP+DP+NPS
+    elif sequence =='nand':
+        desired_order = NPS+ADJP+NUMP+DP
     else:
         raise ValueError('The order is not available yet')
     # desired_order = ['NN', 'NNS', 'NNP', 'NNPS', 'QP', '$', 'CD', 'DT','PRP$', 'PDT', 'POS', 'RB', 'ADJP', 'JJR', 'JJS', 'JJ', ]
@@ -612,17 +616,20 @@ def perturb_np_num_det_adj(sent, lang, seq):
 
 
 TOKENIZER_DICT = {
-"ENRN": "gpt2",
-       "EN": "gpt2",
-       "DE": "dbmdz/german-gpt2",
-       "RU": "sberbank-ai/rugpt3large_based_on_gpt2",
-       "RO": "dumitrescustefan/gpt-neo-romanian-780m",
-       "TR": "ytu-ce-cosmos/turkish-gpt2",
-       "FR": "lightonai/pagnol-xl",
-       "NL": "yhavinga/gpt-neo-125M-dutch",
-       "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
-       "PL":"flax-community/papuGaPT2",
-       "ZH": "hfl/chinese-bert-wwm",
+    'AANN':'gpt2',
+    'NNDA':'gpt2',
+    "ENRN": "gpt2",
+   "EN": "gpt2",
+   "DE": "dbmdz/german-gpt2",
+   "RU": "sberbank-ai/rugpt3large_based_on_gpt2",
+   "RO": "dumitrescustefan/gpt-neo-romanian-780m",
+   "TR": "ytu-ce-cosmos/turkish-gpt2",
+   "FR": "lightonai/pagnol-xl",
+   "NL": "yhavinga/gpt-neo-125M-dutch",
+   "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
+   "PL":"flax-community/papuGaPT2",
+    "PT": "TucanoBR/Tucano-160m",
+    "ZH": "hfl/chinese-bert-wwm",
     "AR": "aubmindlab/aragpt2-base"}
 
 def test_tokenizer(tokenizer):
@@ -641,6 +648,7 @@ gpt2_tokenizer_ro = get_gpt2_tokenizer_with_markers([], 'RO')
 gpt2_tokenizer_fr = get_gpt2_tokenizer_with_markers([], 'FR') 
 gpt2_tokenizer_nl = get_gpt2_tokenizer_with_markers([], 'NL')
 gpt2_tokenizer_pl = get_gpt2_tokenizer_with_markers([], 'PL')
+gpt2_tokenizer_pt = get_gpt2_tokenizer_with_markers([], 'PT')
 gpt2_tokenizer_it = get_gpt2_tokenizer_with_markers([], 'IT')
 gpt2_tokenizer_zh = get_gpt2_tokenizer_with_markers([], 'ZH')
 gpt2_tokenizer_ar = get_gpt2_tokenizer_with_markers([], 'AR')
@@ -684,12 +692,16 @@ TOKENIZER = {
 "IT":{"shuffle": gpt2_tokenizer_it},
 "ZH":{"shuffle": gpt2_tokenizer_zh},
 "PL":{"shuffle": gpt2_tokenizer_pl},
+"PT":{"shuffle": gpt2_tokenizer_pt},
 'AR':{'shuffle': gpt2_tokenizer_ar},
-'ENRN': {"shuffle": gpt2_tokenizer_en}
+'ENRN': {"shuffle": gpt2_tokenizer_en},
+'AANN': {"shuffle": gpt2_tokenizer_en},
+'NNDA': {"shuffle": gpt2_tokenizer_en},
 }
 
-
 FUNCTION_MAP = {
+    'perturb_adj_num_det_np': {'function': perturb_np_num_det_adj, 'seq': 'andn'},
+    'perturb_np_adj_num_det': {'function': perturb_np_num_det_adj, 'seq':'nand'},
     'perturb_adj_num_np_det': {'function': perturb_np_num_det_adj, 'seq':'annd'},
     'perturb_det_adj_np_num': {'function': perturb_np_num_det_adj, 'seq':'dann'},
     'perturb_det_num_np_adj': {'function': perturb_np_num_det_adj, 'seq':'dnna'},
@@ -735,6 +747,22 @@ def get_perturbations(lang, function):
             "affect_function": affect_shuffle,
             "filter_function": filter_shuffle,
             "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],}
+        }
+    elif 'perturb_adj_num_det_np' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'], }
+        }
+    elif 'perturb_np_adj_num_det' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'], }
         }
     elif 'perturb_np_num_det_adj' in function:
         return {function_name: {
