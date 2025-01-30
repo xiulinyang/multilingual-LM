@@ -172,6 +172,8 @@ def reorder_np(np_subtree, sequence):
         desired_order = ADJP+NUMP+DP+NPS
     elif sequence =='nand':
         desired_order = NPS+ADJP+NUMP+DP
+    elif sequence =='dnan':
+        desired_order = DP+NUMP+ADJP+NPS
     else:
         raise ValueError('The order is not available yet')
     # desired_order = ['NN', 'NNS', 'NNP', 'NNPS', 'QP', '$', 'CD', 'DT','PRP$', 'PDT', 'POS', 'RB', 'ADJP', 'JJR', 'JJS', 'JJ', ]
@@ -700,6 +702,7 @@ TOKENIZER = {
 }
 
 FUNCTION_MAP = {
+    'perturb_det_num_adj_np': {'function': perturb_np_num_det_adj, 'seq':'dnan'},
     'perturb_adj_num_det_np': {'function': perturb_np_num_det_adj, 'seq': 'andn'},
     'perturb_np_adj_num_det': {'function': perturb_np_num_det_adj, 'seq':'nand'},
     'perturb_adj_num_np_det': {'function': perturb_np_num_det_adj, 'seq':'annd'},
@@ -749,6 +752,14 @@ def get_perturbations(lang, function):
             "gpt2_tokenizer": TOKENIZER[lang]['shuffle'],}
         }
     elif 'perturb_adj_num_det_np' in function:
+        return {function_name: {
+            "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
+            "lang": lang_name,
+            "affect_function": affect_shuffle,
+            "filter_function": filter_shuffle,
+            "gpt2_tokenizer": TOKENIZER[lang]['shuffle'], }
+        }
+    elif 'perturb_det_num_adj_np' in function:
         return {function_name: {
             "perturbation_function": partial(FUNCTION_MAP[function]['function'], lang=lang, seq=FUNCTION_MAP[function]['seq']),
             "lang": lang_name,
