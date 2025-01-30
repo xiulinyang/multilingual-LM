@@ -612,6 +612,8 @@ def perturb_np_num_det_adj(sent, lang, seq):
 
 
 TOKENIZER_DICT = {
+        "AANN":"gpt2",
+        "NNDA":"gpt2",
 "ENRN": "gpt2",
        "EN": "gpt2",
        "DE": "dbmdz/german-gpt2",
@@ -685,7 +687,9 @@ TOKENIZER = {
 "ZH":{"shuffle": gpt2_tokenizer_zh},
 "PL":{"shuffle": gpt2_tokenizer_pl},
 'AR':{'shuffle': gpt2_tokenizer_ar},
-'ENRN': {"shuffle": gpt2_tokenizer_en}
+'ENRN': {"shuffle": gpt2_tokenizer_en},
+'NNDA': {"shuffle": gpt2_tokenizer_en},
+'AANN': {"shuffle": gpt2_tokenizer_en}
 }
 
 
