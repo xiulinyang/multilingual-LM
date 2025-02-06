@@ -16,7 +16,7 @@ import torch
 # CONSTANTS
 ##############################################################################
 ROOT_PATH = '/scratch/xiulyang'
-EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ENRN','AANN','NNDA']
+EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ITRN', 'ENRN','AANN','NNDA']
 MULTILINGUAL_SPLITS = ["train", 'dev', 'test', 'unittest']
 SEEDS = [21, 53, 84]
 CHECKPOINTS = list(range(50, 501, 50))
@@ -43,10 +43,15 @@ BOS_TOKEN = "<BOS_TOKEN>"
 PART_TOKENS = set(["n't", "'ll", "'s", "'re", "'ve", "'m"])
 PUNCT_TOKENS = set(punctuation)
 
-NPS = ['NN', 'NNS', 'NNP', 'NNPS']
-NUMP = ['QP', '$', 'CD']
-DP =['DT', 'PRP$', 'PDT','POS']
-ADJP = ['RB', 'ADJP', 'JJR', 'JJS', 'JJ']
+# NPS = ['NN', 'NNS', 'NNP', 'NNPS']
+# NUMP = ['QP', '$', 'CD']
+# DP =['DT', 'PRP$', 'PDT','POS']
+# ADJP = ['RB', 'ADJP', 'JJR', 'JJS', 'JJ']
+
+NPS =['NOUN', 'PRON', 'PROPN', 'SYM', 'X']
+NUMP = ['NUM', 'sq']
+DP = ['DET']
+ADJP = ['ADJ', 'sa']
 
 ##############################################################################
 # PARENS MODELS (Structurally-pretrained)
@@ -200,7 +205,7 @@ def reorder_np(np_subtree, sequence):
 def navigate_and_reorder_tree(t, seq):
     for subtree in t:
         try:
-            if subtree.label() == 'NP':
+            if subtree.label() == 'sn':
                 reorder_np(subtree, seq)
             navigate_and_reorder_tree(subtree, seq)
         except AttributeError:
@@ -629,6 +634,7 @@ TOKENIZER_DICT = {
    "FR": "lightonai/pagnol-xl",
    "NL": "yhavinga/gpt-neo-125M-dutch",
    "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
+    "ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
    "PL":"flax-community/papuGaPT2",
     "PT": "TucanoBR/Tucano-160m",
     "ZH": "hfl/chinese-bert-wwm",
@@ -692,6 +698,7 @@ TOKENIZER = {
 "FR":{"shuffle": gpt2_tokenizer_fr},
 "NL":{"shuffle": gpt2_tokenizer_nl},
 "IT":{"shuffle": gpt2_tokenizer_it},
+"ITRN":{"shuffle": gpt2_tokenizer_it},
 "ZH":{"shuffle": gpt2_tokenizer_zh},
 "PL":{"shuffle": gpt2_tokenizer_pl},
 "PT":{"shuffle": gpt2_tokenizer_pt},
