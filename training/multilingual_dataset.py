@@ -16,32 +16,32 @@ _DESCRIPTION = """\
 _ROOT_PATH = 'scratch/xiulyang'
 _PERTURBED_DATA_PATH = f"/{_ROOT_PATH}/multilingual-LM/data/multilingual/multilingual_data_perturbed"
 _FUNCTIONS = [
-    "shuffle_local3",
+    "shuffle_local2",
     "shuffle_local5",
     "shuffle_local10",
+    "shuffle_local3",
     "shuffle_deterministic21",
     "shuffle_deterministic57",
     "shuffle_deterministic84",
     "shuffle_nondeterministic",
     "shuffle_even_odd",
-    "shuffle_local_word3",
-    "shuffle_local_word5",
-    "shuffle_local_word10",
-    "shuffle_deterministic_word21",
-    "shuffle_remove_fw",
-    "perturb_num_adj",
-    "perturb_adj_num",
-    "shuffle_control",
+    #"shuffle_local_word3",
+    #"shuffle_local_word5",
+    #"shuffle_local_word10",
+    #"shuffle_deterministic_word21",
+    #"shuffle_remove_fw",
+    #"perturb_num_adj",
+    #"perturb_adj_num",
+    #"shuffle_control",
     "perturb_reverse_full_word",
     "perturb_np_num_det_adj",
     "perturb_reverse_full",
-    "shuffle_local2"
-    "perturb_np_num_det_adj",
     'perturb_adj_num_np_det',
      'perturb_det_adj_np_num',
      'perturb_det_num_np_adj',
     'perturb_adj_num_det_np',
-    'perturb_np_adj_num_det'
+    'perturb_np_adj_num_det',
+    'perturb_det_num_adj_np'
 ]
 _TRAIN_SETS = ["DE","TR","RU","RO","AR","NL","ZH","PL","PT","FR","IT","EN","ENRN",'NNDA','AANN']
 _PERTURBATIONS = [f"{p}_{lang.lower()}" for p in _FUNCTIONS for lang in _TRAIN_SETS]
