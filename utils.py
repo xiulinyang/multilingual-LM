@@ -16,7 +16,7 @@ import torch
 # CONSTANTS
 ##############################################################################
 ROOT_PATH = '/scratch/xiulyang'
-EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ITRN', 'ENRN','AANN','NNDA']
+EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ITRN', 'ENRN','AANN','NNDA','ZHRN']
 MULTILINGUAL_SPLITS = ["train", 'dev', 'test', 'unittest']
 SEEDS = [21, 53, 84]
 CHECKPOINTS = list(range(50, 501, 50))
@@ -43,15 +43,23 @@ BOS_TOKEN = "<BOS_TOKEN>"
 PART_TOKENS = set(["n't", "'ll", "'s", "'re", "'ve", "'m"])
 PUNCT_TOKENS = set(punctuation)
 
+#EN
 # NPS = ['NN', 'NNS', 'NNP', 'NNPS']
 # NUMP = ['QP', '$', 'CD']
 # DP =['DT', 'PRP$', 'PDT','POS']
 # ADJP = ['RB', 'ADJP', 'JJR', 'JJS', 'JJ']
 
-NPS =['NOUN', 'PRON', 'PROPN', 'SYM', 'X']
-NUMP = ['NUM', 'sq']
-DP = ['DET']
-ADJP = ['ADJ', 'sa']
+#IT
+# NPS =['NOUN', 'PRON', 'PROPN', 'SYM', 'X']
+# NUMP = ['NUM', 'sq']
+# DP = ['DET']
+# ADJP = ['ADJ', 'sa']
+
+#ZH
+NPS = ['NN','NP', 'NR', 'NT', 'PRP', 'PN', 'FW']
+NUMP = ['CD','OD', 'QP']
+ADJP = ['JJ','ADJP', 'DNP', 'DEC','DEG']
+DP = ['DT','M', 'CLP', 'DP']
 
 ##############################################################################
 # PARENS MODELS (Structurally-pretrained)
@@ -638,6 +646,7 @@ TOKENIZER_DICT = {
    "PL":"flax-community/papuGaPT2",
     "PT": "TucanoBR/Tucano-160m",
     "ZH": "hfl/chinese-bert-wwm",
+    "ZHRN":"hfl/chinese-bert-wwm",
     "AR": "aubmindlab/aragpt2-base"}
 
 def test_tokenizer(tokenizer):
@@ -703,6 +712,7 @@ TOKENIZER = {
 "PL":{"shuffle": gpt2_tokenizer_pl},
 "PT":{"shuffle": gpt2_tokenizer_pt},
 'AR':{'shuffle': gpt2_tokenizer_ar},
+'ZHRN': {"shuffle": gpt2_tokenizer_zh},
 'ENRN': {"shuffle": gpt2_tokenizer_en},
 'AANN': {"shuffle": gpt2_tokenizer_en},
 'NNDA': {"shuffle": gpt2_tokenizer_en},
