@@ -32,7 +32,7 @@ _FUNCTIONS = [
     #"shuffle_remove_fw",
     #"perturb_num_adj",
     #"perturb_adj_num",
-    #"shuffle_control",
+    "shuffle_control",
     "perturb_reverse_full_word",
     "perturb_np_num_det_adj",
     "perturb_reverse_full",
