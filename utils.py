@@ -295,7 +295,6 @@ def __perturb_hop_words_complete_hops(sent, num_hops, marker_sg, marker_pl, lang
 
 
 def __perturb_hop_tokens(sent, num_hops, lang):
-
     word_annotations = sent["word_annotations"].copy()
     word_annotations.reverse()
     tokenizer = TOKENIZER[lang]['hop']
@@ -374,7 +373,10 @@ def __perturb_np_num_det_adj(sent, lang, seq):
     tree = sent['constituency_parse']
     t = Tree.fromstring(tree)
     t = navigate_and_reorder_tree(t, seq)
-    return tokenizer.encode(' '.join(t.leaves()))
+    if lang=='ZH':
+        return tokenizer.encode(''.join(t.leaves()))
+    else:
+        return tokenizer.encode(' '.join(t.leaves()))
 
 def __perturb_reverse_full_word(sent, lang):
     tokenizer = TOKENIZER[lang]['shuffle']
@@ -512,6 +514,7 @@ def __perturb_remove_fw(sent,lang):
     sent_text = ' '.join([x['text'] for x in sent['word_annotations'] if x['upos'] not in ['DET', 'AUX', 'ADP', 'SCONJ', 'PART','CCONJ']])
     tokens = tokenizer.encode(sent_text)
     return tokens
+
 ##############################################################################
 # AFFECT FUNCTIONS
 # These functions define when a perturbation has been applied to a sentence
