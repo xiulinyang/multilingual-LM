@@ -16,7 +16,7 @@ import torch
 # CONSTANTS
 ##############################################################################
 ROOT_PATH = '/scratch/xiulyang'
-EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ITRN', 'ENRN','AANN','NNDA','ZHRN']
+EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ITRN', 'ENRN','PTRN','AANN','NNDA','ZHRN']
 MULTILINGUAL_SPLITS = ["train", 'dev', 'test', 'unittest']
 SEEDS = [21, 53, 84]
 CHECKPOINTS = list(range(50, 501, 50))
@@ -56,10 +56,18 @@ PUNCT_TOKENS = set(punctuation)
 # ADJP = ['ADJ', 'sa']
 
 #ZH
-NPS = ['NN','NP', 'NR', 'NT', 'PRP', 'PN', 'FW']
-NUMP = ['CD','OD', 'QP']
-ADJP = ['JJ','ADJP', 'DNP', 'DEC','DEG']
-DP = ['DT','M', 'CLP', 'DP']
+# NPS = ['NN','NP', 'NR', 'NT', 'PRP', 'PN', 'FW']
+# NUMP = ['CD','OD', 'QP']
+# ADJP = ['JJ','ADJP', 'DNP', 'DEC','DEG']
+# DP = ['DT','M', 'CLP', 'DP']
+
+
+#PT
+NPS = ["N'","NOUN", "PRON"]
+NUMP = ["QNT", "QNT'", "NUM","PERCENTP","PERCENTP'","CARD","CARD'"]
+ADJP = ["ADJ", "AP"]
+DP = ["DET", "D", "DEM", "POSS", "POSS'"]
+
 
 ##############################################################################
 # PARENS MODELS (Structurally-pretrained)
@@ -647,7 +655,8 @@ TOKENIZER_DICT = {
    "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
     "ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
    "PL":"flax-community/papuGaPT2",
-    "PT": "TucanoBR/Tucano-160m",
+    "PT": "NOVA-vision-language/GlorIA-1.3B'",
+    "PTRN": "NOVA-vision-language/GlorIA-1.3B'",
     "ZH": "hfl/chinese-bert-wwm",
     "ZHRN":"hfl/chinese-bert-wwm",
     "AR": "aubmindlab/aragpt2-base"}
@@ -716,6 +725,7 @@ TOKENIZER = {
 "PT":{"shuffle": gpt2_tokenizer_pt},
 'AR':{'shuffle': gpt2_tokenizer_ar},
 'ZHRN': {"shuffle": gpt2_tokenizer_zh},
+'PTRN': {"shuffle": gpt2_tokenizer_pt},
 'ENRN': {"shuffle": gpt2_tokenizer_en},
 'AANN': {"shuffle": gpt2_tokenizer_en},
 'NNDA': {"shuffle": gpt2_tokenizer_en},
@@ -723,8 +733,8 @@ TOKENIZER = {
 
 FUNCTION_MAP = {
     'perturb_det_num_adj_np': {'function': perturb_np_num_det_adj, 'seq':'dnan'},
-    'perturb_adj_num_det_np': {'function': perturb_np_num_det_adj, 'seq': 'andn'},
-    'perturb_np_adj_num_det': {'function': perturb_np_num_det_adj, 'seq':'nand'},
+    # 'perturb_adj_num_det_np': {'function': perturb_np_num_det_adj, 'seq': 'andn'},
+    # 'perturb_np_adj_num_det': {'function': perturb_np_num_det_adj, 'seq':'nand'},
     'perturb_adj_num_np_det': {'function': perturb_np_num_det_adj, 'seq':'annd'},
     'perturb_det_adj_np_num': {'function': perturb_np_num_det_adj, 'seq':'dann'},
     'perturb_det_num_np_adj': {'function': perturb_np_num_det_adj, 'seq':'dnna'},

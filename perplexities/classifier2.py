@@ -13,17 +13,10 @@ def perp_translate(row):
     else:
         return 0
 
-perplexity_result = pd.read_csv('data/perplexity_results.csv')
+perplexity_result = pd.read_csv('perplexity_results.csv')
 
 perplexity_result['possible'] = perplexity_result.apply(perp_translate, axis=1)
 perplexity_result.drop(perplexity_result[perplexity_result.perturb.str.contains('adj')].index, inplace=True)
-
-checkpoint_columns = [col for col in perplexity_result.columns if 'checkpoint' in col]
-aggregated = perplexity_result.groupby(['perturb', 'lang'])[checkpoint_columns].mean().reset_index()
-aggregated['possible'] = perplexity_result.groupby(['perturb', 'lang'])['possible'].mean().reset_index()['possible']
-aggregated['seed'] = "average"
-perplexity_result = aggregated
-
 perplexity_result.drop(['lang', 'seed', 'perturb'], axis=1, inplace=True)
 # perplexity_result = (perplexity_result - perplexity_result.min()) / (perplexity_result.max() - perplexity_result.min())
 
