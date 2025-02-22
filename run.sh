@@ -2,7 +2,7 @@
 
 # Accept a language argument
 LANGUAGE=$1
-#GPU=$2
+#GPU=$2 # if you want to specify a GPU node
 PERTURB=$2
 RANDOMSEED=$3
 

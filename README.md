@@ -34,7 +34,7 @@ Please change the file or root paths in the following scripts:
 - training/conf/template/multilingual_dataset_template.yaml
 - training/conf/template/multilingual_train_template.yaml (wandb)
 
-## STEP3: Prepare language data
+## STEP3: Prepare language data for the experiments
 ```commandline
 cd data
 python tag.py path/to/language/file -b batch_size -l LANG 
