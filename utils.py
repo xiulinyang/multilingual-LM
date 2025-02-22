@@ -655,7 +655,7 @@ TOKENIZER_DICT = {
    "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
     "ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
    "PL":"flax-community/papuGaPT2",
-    "PT": "NOVA-vision-language/GlorIA-1.3B'",
+    "PT": "NOVA-vision-language/GlorIA-1.3B",
     "PTRN": "NOVA-vision-language/GlorIA-1.3B'",
     "ZH": "hfl/chinese-bert-wwm",
     "ZHRN":"hfl/chinese-bert-wwm",
