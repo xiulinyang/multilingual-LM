@@ -3,28 +3,6 @@
 ## Overall
 This repository is based on [mission-impossible-language-models](https://github.com/jkallini/mission-impossible-language-models).
 
-# Condor submit
-Use the submit/run.sub to submit. Replace \<username\>, \<projdir\>, \<envname\> and \<wandbkey\> in all files under submit/ with correct names.
-
-# TODO List
-
-## Experiment
-- [ ] EN shuffle_local2 41|53|81
-- [ ] AR shuffle_control|shuffle_local3|shuffle_local5|shuffle_local10|shuffle_deterministic21|shuffle_deterministic84|shuffle_deterministic57|shuffle_nondeterministic|shuffle_even_odd 41|53|81
-- [ ] PL shuffle_local3 (53) |shuffle_local5 (81)|shuffle_local10 (41,53) |shuffle_deterministic21|shuffle_deterministic84|shuffle_deterministic57|shuffle_nondeterministic| 41|53|81
-- [ ] FR shuffle_control|shuffle_local3|shuffle_local5|shuffle_local10|shuffle_deterministic21|shuffle_deterministic84|shuffle_deterministic57|shuffle_nondeterministic|shuffle_even_odd 41|53|81
-- [ ] EN perturb_adj_num 41|53|81 (Xiulin needs to upload data!!)
-
-## Assignments
-- **Xiulin**
-  - [ ] RU
-  - [ ] DE
-  - [ ] NL
-- **Yuekun**
-  - [ ] ZH
-  - [ ] IT
-  - [ ] RO
-
 ## STEP1: Setup and Environment
 First, please clone the two repositories:
 ```commandline
@@ -56,7 +34,7 @@ Please change the file or root paths in the following scripts:
 - training/conf/template/multilingual_dataset_template.yaml
 - training/conf/template/multilingual_train_template.yaml (wandb)
 
-## STEP3: Prepare impossible languages
+## STEP3: Prepare language data
 ```commandline
 cd data
 python tag.py path/to/language/file -b batch_size -l LANG 

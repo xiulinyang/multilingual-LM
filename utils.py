@@ -646,7 +646,7 @@ TOKENIZER_DICT = {
     'NNDA':'gpt2',
     "ENRN": "gpt2",
    "EN": "gpt2",
-   "DE": "dbmdz/german-gpt2",
+   "DE": "malteos/gpt2-xl-wechsel-german",
    "RU": "sberbank-ai/rugpt3large_based_on_gpt2",
    "RO": "dumitrescustefan/gpt-neo-romanian-780m",
    "TR": "ytu-ce-cosmos/turkish-gpt2",
