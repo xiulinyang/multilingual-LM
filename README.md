@@ -55,10 +55,13 @@ Parameters:
 
 # Experiment with other languages and other perturbations
 If you want to experiment with additional languages or apply perturbations beyond those discussed in our paper, follow these steps:
-1. **Add your language data**:  
+## New langauges
+1**Add your language data**:  
    Place the new language files in the `data/` folder, maintaining the existing data structure.
 2. **Update language references**:  
    - Add the new language name to `util.py` and `training/multilingual_dataset.py`.  
    - Update the tokenizer configuration in `mistral/conf/models/`.  
+## New perturbations
+- Please update the `util.py` and `training/multilingual_dataset.py` with your new perturbation function. 
 
 If you need the OPUS12 and OPUS30 corpus, or have any questions, feel free to open an issue or contact me at **xiulin.yang.compling@gmail.com**.
