@@ -13,7 +13,7 @@ def perp_translate(row):
     else:
         return 0
 
-perplexity_result = pd.read_csv('data/perplexity_results.csv')
+perplexity_result = pd.read_csv('perplexity_results.csv')
 
 perplexity_result['possible'] = perplexity_result.apply(perp_translate, axis=1)
 perplexity_result.drop(perplexity_result[perplexity_result.perturb.str.contains('adj')].index, inplace=True)
@@ -43,8 +43,7 @@ clf= svm.SVC(kernel='linear', C=1, gamma='auto')
 # clf = GridSearchCV(clf, parameters, verbose=True)
 clf.fit(X_train, y_train)
 
-# sorted(clf.cv_results_['mean_test_score'])
-# print(cross_val_score(clf, X_train, y_train, cv=5, scoring='f1_macro'))
+print(sum(cross_val_score(clf, X_train, y_train, cv=5, scoring='f1_macro'))/5)
 
 y_pred = clf.predict(X_test)
 print(pd.crosstab(y_test, y_pred))

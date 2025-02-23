@@ -14,15 +14,15 @@ ling_info = [
     # English (EN)
     [
         ("en", "EN", "perturb_reverse_full_word", "*", "-", 'perturb_reverse_full_word'),
-        ("en", "EN", "shuffle_deterministic84", "v", "-", 'shuffle_deterministic84'),  # Down Triangle, Solid
-        ("en", "EN", "shuffle_deterministic57", "v", ":", 'shuffle_deterministic57'),  # Down Triangle, Dotted
-        ("en", "EN", "shuffle_deterministic21", "v", "--", 'shuffle_deterministic21'),  # Down Triangle,
-        ("en", "EN", "shuffle_local10", "^", "-.", 'shuffle_local10'),  # Up Triangle, Dash-Dot
-        ("en", "EN", "shuffle_local5", "^", "--", 'shuffle_local5'),
-        ("en", "EN", "shuffle_local3", "^", "-", 'shuffle_local3'),
-        ("en", "EN", "shuffle_local2", "^", "-", 'shuffle_local2'),
+        ("en", "EN", "shuffle_deterministic84", "v", "-", 'shuffle_deterministic84'),
+        ("en", "EN", "shuffle_deterministic57", "v", ":", 'shuffle_deterministic57'),
+        ("en", "EN", "shuffle_deterministic21", "v", "--", 'shuffle_deterministic21'),
+        ("en", "EN", "shuffle_local10", "^", "-.", 'shuffle_local(w=10)'),
+        ("en", "EN", "shuffle_local5", "^", "--", 'shuffle_local(w=5)'),
+        ("en", "EN", "shuffle_local3", "^", "-", 'shuffle_local(w=3)'),
+        ("en", "EN", "shuffle_local2", "^", "-", 'shuffle_local(w=2)'),
         ("en", "EN", "shuffle_even_odd", "d", "-.", 'shuffle_even_odd'),
-        ("en", "EN", "shuffle_control", "o", "-", 'no_shuffle')],  # Diamond, Dash-Dot
+        ("en", "EN", "shuffle_control", "o", "-", 'attested')],  # Diamond, Dash-Dot
 
     [
         ("de", "DE", "perturb_reverse_full_word", "*", "-", 'perturb_reverse_full_word'),
@@ -32,7 +32,7 @@ ling_info = [
         ("de", "DE", "shuffle_local10", "^", "-.", 'de-shuffle_local10'),
         ("de", "DE", "shuffle_local5", "^", "--", 'de-shuffle_local5'),
         ("de", "DE", "shuffle_local3", "^", "-", 'de-shuffle_local3'),
-        # ("de", "DE", "shuffle_local2", "^", "-", 'de-shuffle_local2'),
+        ("de", "DE", "shuffle_local2", "^", "-", 'de-shuffle_local2'),
         ("de", "DE", "shuffle_even_odd", "d", "-.", 'de-shuffle_even_odd'),
         ("de", "DE", "shuffle_control", "o", "-", 'de-no_shuffle'), ],
 
@@ -70,20 +70,20 @@ ling_info = [
         ("nl", "NL", "shuffle_local10", "^", "-.", 'nl-shuffle_local10'),
         ("nl", "NL", "shuffle_local5", "^", "--", 'nl-shuffle_local5'),
         ("nl", "NL", "shuffle_local3", "^", "-", 'nl-shuffle_local3'),
-        # ("nl", "NL", "shuffle_local2", "^", "-", 'nl-shuffle_local2'),
+        ("nl", "NL", "shuffle_local2", "^", "-", 'nl-shuffle_local2'),
         ("nl", "NL", "shuffle_even_odd", "d", "-.", 'nl-shuffle_even_odd'),
         ("nl", "NL", "shuffle_control", "o", "-", 'nl-no_shuffle'), ],
 
     # # # # Chinese (ZH)
     [
-        # ("zh", "ZH", "perturb_reverse_full_word", "*", "-", 'perturb_reverse_full_word'),
+        ("zh", "ZH", "perturb_reverse_full_word", "*", "-", 'perturb_reverse_full_word'),
         ("zh", "ZH", "shuffle_deterministic84", "v", "-", 'zh-shuffle_deterministic84'),
         ("zh", "ZH", "shuffle_deterministic57", "v", ":", 'zh-shuffle_deterministic57'),
         ("zh", "ZH", "shuffle_deterministic21", "v", "--", 'zh-shuffle_deterministic21'),
         ("zh", "ZH", "shuffle_local10", "^", "-.", 'zh-shuffle_local10'),
         ("zh", "ZH", "shuffle_local5", "^", "--", 'zh-shuffle_local5'),
         ("zh", "ZH", "shuffle_local3", "^", "-", 'zh-shuffle_local3'),
-        # ("zh", "ZH", "shuffle_local2", "^", "-", 'zh-shuffle_local2'),
+        ("zh", "ZH", "shuffle_local2", "^", "-", 'zh-shuffle_local2'),
         ("zh", "ZH", "shuffle_even_odd", "d", "-.", 'zh-shuffle_even_odd'),
         ("zh", "ZH", "shuffle_control", "o", "-", 'zh-no_shuffle'), ],
 
@@ -107,7 +107,7 @@ ling_info = [
         ("pl", "PL", "shuffle_local10", "^", "-.", 'pl-shuffle_local10'),
         ("pl", "PL", "shuffle_local5", "^", "--", 'pl-shuffle_local5'),
         ("pl", "PL", "shuffle_local3", "^", "-", 'pl-shuffle_local3'),
-        # ("pl", "PL", "shuffle_local2", "^", "-", 'pl-shuffle_local2'),
+        ("pl", "PL", "shuffle_local2", "^", "-", 'pl-shuffle_local2'),
         ("pl", "PL", "shuffle_even_odd", "d", "-.", 'pl-shuffle_even_odd'),
         ("pl", "PL", "shuffle_control", "o", "-", 'pl-no_shuffle')],
 
@@ -152,7 +152,7 @@ ling_info = [
         ("fr", "FR", "shuffle_control", "o", "-", 'fr-no_shuffle'), ],
     [
         ("pt", "PT", "perturb_reverse_full_word", "*", "-", 'perturb_reverse_full_word'),
-        # ("pt", "PT", "shuffle_deterministic84", "v", "-", 'pt-shuffle_deterministic84'),
+        ("pt", "PT", "shuffle_deterministic84", "v", "-", 'pt-shuffle_deterministic84'),
         ("pt", "PT", "shuffle_deterministic57", "v", ":", 'pt-shuffle_deterministic57'),
         ("pt", "PT", "shuffle_deterministic21", "v", "--", 'pt-shuffle_deterministic21'),
         ("pt", "PT", "shuffle_local10", "^", "-.", 'pt-shuffle_local10'),
@@ -193,15 +193,15 @@ def plot_mean_perplexities_multilingual(ax, file_info, title, checkpoints, seeds
             all_seeds_gmeans.append(gmeans)
         all_seeds_gmeans = np.array(all_seeds_gmeans)
         means = np.mean(all_seeds_gmeans, axis=0)
-
         if len(seeds) > 1:
-            ci = stats.sem(all_seeds_gmeans, axis=0)
+            means = np.mean(all_seeds_gmeans, axis=0)
+            sems = stats.sem(all_seeds_gmeans, axis=0)
+            ci = 1.96 * sems
+            ci_lower = means - ci
+            ci_upper = means + ci
+            ci = (ci_upper - ci_lower) / 2
         else:
-            ci = None  # No confidence interval for a single seed
-
-        # if permutation =='shuffle_control':
-        #     colorp = PERTURBATION[f'{permutation}'][lang2]
-        # else:
+            ci = None
         colorp = PERTURBATION[f'{permutation}']
         if ci is not None:
             ax.errorbar(checkpoints, means, yerr=ci, marker=marker, markersize=4, linewidth=0.8,
@@ -221,7 +221,7 @@ def plot_perplexities_multilingual(file_infos, titles, checkpoints, seeds, PERTU
     # Create the figure and a single axis (axs)
     fig, axes = plt.subplots(3, 4, figsize=(15, 10))
     fig.subplots_adjust(wspace=0.15)
-    fig.supylabel('Geometric Mean Perplexity', fontsize=18)
+    fig.supylabel('Geometric Mean Perplexity of Test Set', fontsize=18)
     fig.supxlabel("Training Steps", fontsize=18)
     axes = axes.flatten()
     # axes[11].remove()
@@ -233,7 +233,7 @@ def plot_perplexities_multilingual(file_infos, titles, checkpoints, seeds, PERTU
         axes[i].legend().set_visible(False)
         # axes[i].legend(title="Experiments", loc='upper left', bbox_to_anchor=(1.05, 1), fontsize=6, ncol=2, borderaxespad=0.)
     handles, labels = axes[0].get_legend_handles_labels()  # Get legend info from the first plot
-    fig.legend(handles, labels, title="Experiments", loc='lower center', bbox_to_anchor=(0.5, -0.05), ncol=len(labels),
+    fig.legend(handles, labels, title="Languages", loc='lower center', bbox_to_anchor=(0.5, -0.05), ncol=5,
                fontsize=8)
     plt.savefig(output_name, format="pdf", bbox_inches="tight")
 

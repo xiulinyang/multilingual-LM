@@ -653,7 +653,7 @@ TOKENIZER_DICT = {
    "FR": "lightonai/pagnol-xl",
    "NL": "yhavinga/gpt-neo-125M-dutch",
    "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
-    "ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
+   "ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
    "PL":"flax-community/papuGaPT2",
     "PT": "NOVA-vision-language/GlorIA-1.3B",
     "PTRN": "NOVA-vision-language/GlorIA-1.3B'",

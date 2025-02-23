@@ -1,0 +1,202 @@
+[
+    {
+        "sent_annotations": [
+            {
+                "sent_text": "Hey , there , young fella .",
+                "constituency_parse": "(ROOT (ROOT (FRAG (INTJ (UH Hey)) (, ,) (INTJ (RB there)) (, ,) (NP (JJ young) (NN fella)) (. .))))",
+                "word_annotations": [
+                    {
+                        "id": 1,
+                        "text": "Hey",
+                        "lemma": "hey",
+                        "upos": "INTJ",
+                        "xpos": "UH",
+                        "feats": null,
+                        "start_char": 0,
+                        "end_char": 3
+                    },
+                    {
+                        "id": 2,
+                        "text": ",",
+                        "lemma": ",",
+                        "upos": "PUNCT",
+                        "xpos": ",",
+                        "feats": null,
+                        "start_char": 3,
+                        "end_char": 4
+                    },
+                    {
+                        "id": 3,
+                        "text": "there",
+                        "lemma": "there",
+                        "upos": "ADV",
+                        "xpos": "RB",
+                        "feats": "PronType=Dem",
+                        "start_char": 5,
+                        "end_char": 10
+                    },
+                    {
+                        "id": 4,
+                        "text": ",",
+                        "lemma": ",",
+                        "upos": "PUNCT",
+                        "xpos": ",",
+                        "feats": null,
+                        "start_char": 10,
+                        "end_char": 11
+                    },
+                    {
+                        "id": 5,
+                        "text": "young",
+                        "lemma": "young",
+                        "upos": "ADJ",
+                        "xpos": "JJ",
+                        "feats": "Degree=Pos",
+                        "start_char": 12,
+                        "end_char": 17
+                    },
+                    {
+                        "id": 6,
+                        "text": "fella",
+                        "lemma": "fella",
+                        "upos": "NOUN",
+                        "xpos": "NN",
+                        "feats": "Number=Sing",
+                        "start_char": 18,
+                        "end_char": 23
+                    },
+                    {
+                        "id": 7,
+                        "text": ".",
+                        "lemma": ".",
+                        "upos": "PUNCT",
+                        "xpos": ".",
+                        "feats": null,
+                        "start_char": 23,
+                        "end_char": 24
+                    }
+                ]
+            },
+            {
+                "sent_text": "That was a waste of time .",
+                "constituency_parse": "(ROOT (ROOT (S (NP (DT That)) (VP (VBD was) (NP (NP (DT a) (NN waste)) (PP (IN of) (NP (NN time))))) (. .))))",
+                "word_annotations": [
+                    {
+                        "id": 1,
+                        "text": "That",
+                        "lemma": "that",
+                        "upos": "PRON",
+                        "xpos": "DT",
+                        "feats": "Number=Sing|PronType=Dem",
+                        "start_char": 25,
+                        "end_char": 29
+                    },
+                    {
+                        "id": 2,
+                        "text": "was",
+                        "lemma": "be",
+                        "upos": "AUX",
+                        "xpos": "VBD",
+                        "feats": "Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin",
+                        "start_char": 30,
+                        "end_char": 33
+                    },
+                    {
+                        "id": 3,
+                        "text": "a",
+                        "lemma": "a",
+                        "upos": "DET",
+                        "xpos": "DT",
+                        "feats": "Definite=Ind|PronType=Art",
+                        "start_char": 34,
+                        "end_char": 35
+                    },
+                    {
+                        "id": 4,
+                        "text": "waste",
+                        "lemma": "waste",
+                        "upos": "NOUN",
+                        "xpos": "NN",
+                        "feats": "Number=Sing",
+                        "start_char": 36,
+                        "end_char": 41
+                    },
+                    {
+                        "id": 5,
+                        "text": "of",
+                        "lemma": "of",
+                        "upos": "ADP",
+                        "xpos": "IN",
+                        "feats": null,
+                        "start_char": 42,
+                        "end_char": 44
+                    },
+                    {
+                        "id": 6,
+                        "text": "time",
+                        "lemma": "time",
+                        "upos": "NOUN",
+                        "xpos": "NN",
+                        "feats": "Number=Sing",
+                        "start_char": 45,
+                        "end_char": 49
+                    },
+                    {
+                        "id": 7,
+                        "text": ".",
+                        "lemma": ".",
+                        "upos": "PUNCT",
+                        "xpos": ".",
+                        "feats": null,
+                        "start_char": 49,
+                        "end_char": 50
+                    }
+                ]
+            },
+            {
+                "sent_text": "His blood helped .",
+                "constituency_parse": "(ROOT (ROOT (S (NP (PRP$ His) (NN blood)) (VP (VBD helped)) (. .))))",
+                "word_annotations": [
+                    {
+                        "id": 1,
+                        "text": "His",
+                        "lemma": "his",
+                        "upos": "PRON",
+                        "xpos": "PRP$",
+                        "feats": "Case=Gen|Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronType=Prs",
+                        "start_char": 51,
+                        "end_char": 54
+                    },
+                    {
+                        "id": 2,
+                        "text": "blood",
+                        "lemma": "blood",
+                        "upos": "NOUN",
+                        "xpos": "NN",
+                        "feats": "Number=Sing",
+                        "start_char": 55,
+                        "end_char": 60
+                    },
+                    {
+                        "id": 3,
+                        "text": "helped",
+                        "lemma": "help",
+                        "upos": "VERB",
+                        "xpos": "VBD",
+                        "feats": "Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin",
+                        "start_char": 61,
+                        "end_char": 67
+                    },
+                    {
+                        "id": 4,
+                        "text": ".",
+                        "lemma": ".",
+                        "upos": "PUNCT",
+                        "xpos": ".",
+                        "feats": null,
+                        "start_char": 67,
+                        "end_char": 68
+                    }
+                ]
+            }
+       ]}]
