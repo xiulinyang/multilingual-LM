@@ -52,3 +52,13 @@ Parameters:
 - LANG: Language code (e.g., EN, DE, etc.).
 - PERTURBATION: Perturbation type (defined in the FUNCTION_MAPS in utils.py).
 - RANDOM_SEED: Random seed (in our experiments, we use 41, 53, 81).
+
+# Experiment with other languages and other perturbations
+If you want to experiment with additional languages or apply perturbations beyond those discussed in our paper, follow these steps:
+1. **Add your language data**:  
+   Place the new language files in the `data/` folder, maintaining the existing data structure.
+2. **Update language references**:  
+   - Add the new language name to `util.py` and `training/multilingual_dataset.py`.  
+   - Update the tokenizer configuration in `mistral/conf/models/`.  
+
+If you have any questions, feel free to open an issue or contact me at **xiulin.yang.compling@gmail.com**.
