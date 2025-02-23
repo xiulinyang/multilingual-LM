@@ -6,7 +6,6 @@ import sys
 sys.path.append("..")
 
 from transformers import GPT2LMHeadModel
-from gpt2_no_positional_encoding_model import GPT2NoPositionalEncodingLMHeadModel
 from utils import CHECKPOINT_READ_PATH, FUNCTION_MAP, MULTILINGUAL_DATA_PATH, \
     PAREN_MODELS, TOKENIZER, EXP_LANGS
 from tqdm import tqdm
@@ -158,12 +157,8 @@ if __name__ == "__main__":
         print(f"Checkpoint: {ckpt}")
 
         # Load model
-        if args.no_pos_encodings:
-            model = GPT2NoPositionalEncodingLMHeadModel.from_pretrained(
-                model_path + str(ckpt)).to(device)
-        else:
-            model = GPT2LMHeadModel.from_pretrained(
-            model_path + str(ckpt)).to(device)
+        model = GPT2LMHeadModel.from_pretrained(
+        model_path + str(ckpt)).to(device)
 
         # Get perplexities
         perplexities = []
