@@ -61,4 +61,4 @@ If you want to experiment with additional languages or apply perturbations beyon
    - Add the new language name to `util.py` and `training/multilingual_dataset.py`.  
    - Update the tokenizer configuration in `mistral/conf/models/`.  
 
-If you have any questions, feel free to open an issue or contact me at **xiulin.yang.compling@gmail.com**.
+If you need the OPUS12 and OPUS30 corpus, or have any questions, feel free to open an issue or contact me at **xiulin.yang.compling@gmail.com**.
