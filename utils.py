@@ -2,9 +2,11 @@
 # Author: Julie Kallini
 
 from collections import deque
+from logging import raiseExceptions
 from string import punctuation
 from warnings import WarningMessage
 from nltk import Tree
+from nltk.corpus.reader import ADJ_SAT
 from transformers import AutoTokenizer, AddedToken,GPT2LMHeadModel, GPT2Tokenizer,AutoTokenizer, AutoModel
 from functools import partial
 from numpy.random import default_rng
@@ -42,45 +44,6 @@ MARKER_REV = "🅁"
 BOS_TOKEN = "<BOS_TOKEN>"
 PART_TOKENS = set(["n't", "'ll", "'s", "'re", "'ve", "'m"])
 PUNCT_TOKENS = set(punctuation)
-
-#EN
-# NPS = ['NN', 'NNS', 'NNP', 'NNPS']
-# NUMP = ['QP', '$', 'CD']
-# DP =['DT', 'PRP$', 'PDT','POS']
-# ADJP = ['RB', 'ADJP', 'JJR', 'JJS', 'JJ']
-
-#IT
-# NPS =['NOUN', 'PRON', 'PROPN', 'SYM', 'X']
-# NUMP = ['NUM', 'sq']
-# DP = ['DET']
-# ADJP = ['ADJ', 'sa']
-
-#ZH
-# NPS = ['NN','NP', 'NR', 'NT', 'PRP', 'PN', 'FW']
-# NUMP = ['CD','OD', 'QP']
-# ADJP = ['JJ','ADJP', 'DNP', 'DEC','DEG']
-# DP = ['DT','M', 'CLP', 'DP']
-
-
-#PT
-NPS = ["N'","NOUN", "PRON"]
-NUMP = ["QNT", "QNT'", "NUM","PERCENTP","PERCENTP'","CARD","CARD'"]
-ADJP = ["ADJ", "AP"]
-DP = ["DET", "D", "DEM", "POSS", "POSS'"]
-
-
-##############################################################################
-# PARENS MODELS (Structurally-pretrained)
-##############################################################################
-
-
-PAREN_MODEL_PATH = "/u/scr/isabelvp//tilt-stuff/tilt-finetuning/pretrained_checkpoints/"
-PAREN_MODELS = {
-    "CROSS": "flat-parens_vocab500-uniform_deplength-nesting-nolimit",
-    "NEST": "nested-parens0.49_vocab500-uniform",
-    "RAND": "random_vocab500-uniform",
-}
-
 
 ##############################################################################
 # HELPER FUNCTIONS
@@ -178,7 +141,30 @@ def __perturb_hop_words(sent, num_hops, marker_sg, marker_pl,lang):
         sent, num_hops, marker_sg, marker_pl,lang)
     return perturbed_tokens
 
-def reorder_np(np_subtree, sequence):
+def reorder_np(lang, np_subtree, sequence):
+    if lang=='EN':
+        NPS = ['NN', 'NNS', 'NNP', 'NNPS']
+        NUMP = ['QP', '$', 'CD']
+        DP =['DT', 'PRP$', 'PDT','POS']
+        ADJP = ['RB', 'ADJP', 'JJR', 'JJS', 'JJ']
+    elif lang =='ZH':
+        NPS = ['NN','NP', 'NR', 'NT', 'PRP', 'PN', 'FW']
+        NUMP = ['CD','OD', 'QP']
+        ADJP = ['JJ','ADJP', 'DNP', 'DEC','DEG']
+        DP = ['DT','M', 'CLP', 'DP']
+    elif lang =='IT':
+        NPS =['NOUN', 'PRON', 'PROPN', 'SYM', 'X']
+        NUMP = ['NUM', 'sq']
+        DP = ['DET']
+        ADJP = ['ADJ', 'sa']
+    elif lang =='PT':
+        NPS = ["N'", "NOUN", "PRON"]
+        NUMP = ["QNT", "QNT'", "NUM", "PERCENTP", "PERCENTP'", "CARD", "CARD'"]
+        ADJP = ["ADJ", "AP"]
+        DP = ["DET", "D", "DEM", "POSS", "POSS'"]
+    else:
+        raise ValueError('The language is not supported!')
+
     desired = []
     others = []
     if sequence =='dnna':
@@ -197,7 +183,6 @@ def reorder_np(np_subtree, sequence):
         desired_order = DP+NUMP+ADJP+NPS
     else:
         raise ValueError('The order is not available yet')
-    # desired_order = ['NN', 'NNS', 'NNP', 'NNPS', 'QP', '$', 'CD', 'DT','PRP$', 'PDT', 'POS', 'RB', 'ADJP', 'JJR', 'JJS', 'JJ', ]
     for child in np_subtree:
         if hasattr(child, "label") and child.label() in desired_order:
             desired.append(child)
@@ -218,12 +203,18 @@ def reorder_np(np_subtree, sequence):
 
     np_subtree[:] = reordered_children
 
-def navigate_and_reorder_tree(t, seq):
+def navigate_and_reorder_tree(lang, t, seq):
+    if lang in ['EN', 'ZH', 'PT']:
+        n = 'NP'
+    elif lang =='IT':
+        n = 'sn'
+    else:
+        raise ValueError('The language is not supported!')
     for subtree in t:
         try:
-            if subtree.label() == 'sn':
-                reorder_np(subtree, seq)
-            navigate_and_reorder_tree(subtree, seq)
+            if subtree.label() == n:
+                reorder_np(lang, subtree, seq)
+            navigate_and_reorder_tree(lang, subtree, seq)
         except AttributeError:
             continue
     return t
@@ -380,7 +371,7 @@ def __perturb_np_num_det_adj(sent, lang, seq):
     tokenizer = TOKENIZER[lang]['shuffle']
     tree = sent['constituency_parse']
     t = Tree.fromstring(tree)
-    t = navigate_and_reorder_tree(t, seq)
+    t = navigate_and_reorder_tree(lang, t, seq)
     if lang=='ZH':
         return tokenizer.encode(''.join(t.leaves()))
     else:
@@ -656,18 +647,10 @@ TOKENIZER_DICT = {
    "ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
    "PL":"flax-community/papuGaPT2",
     "PT": "NOVA-vision-language/GlorIA-1.3B",
-    "PTRN": "NOVA-vision-language/GlorIA-1.3B'",
-    "ZH": "hfl/chinese-bert-wwm",
-    "ZHRN":"hfl/chinese-bert-wwm",
+    "PTRN": "NOVA-vision-language/GlorIA-1.3B",
+    "ZH": "google-bert/bert-base-chinese",
+    "ZHRN":"google-bert/bert-base-chinese",
     "AR": "aubmindlab/aragpt2-base"}
-
-def test_tokenizer(tokenizer):
-    print(tokenizer)
-    print('a')
-    print(len(tokenizer))
-    print(tokenizer.encode('<|endoftext|>'))
-
-
 
 gpt2_tokenizer_de = get_gpt2_tokenizer_with_markers([], 'DE')
 gpt2_tokenizer_en = get_gpt2_tokenizer_with_markers([],'EN')
@@ -699,16 +682,6 @@ marker_sg_token = gpt2_hop_tokenizer_en.get_added_vocab()[
            MARKER_HOP_SING]
 marker_pl_token = gpt2_hop_tokenizer_en.get_added_vocab()[
            MARKER_HOP_PLUR]
-# GPT-2 determiner tokenization
-# Get id of BOS token
-#gpt2_original_tokenizer = get_gpt2_tokenizer_with_markers([],)
-##############################################################################
-# PERTURBATIONS
-# This dict maps the name of a perturbation to its perturbation and filter
-# functions. The names and functions in this dict are used throughout the
-# repo.
-##############################################################################
-
 
 TOKENIZER = {
 'EN':{"shuffle": gpt2_tokenizer_en},
