@@ -34,15 +34,17 @@ def create_attention_mask(token_lists):
     return mask
 
 
-def create_input_ids(token_lists, pad_token_id):
+def create_input_ids(lang, token_lists, pad_token_id):
+    if lang=='ZH':
+        pad_token_id = 0
     padded = zip(*itertools.zip_longest(*token_lists, fillvalue=pad_token_id))
     return torch.tensor(list(padded))
 
 
-def get_perplexities(model, token_lists, pad_token_id, device="cuda"):
+def get_perplexities(model, token_lists, pad_token_id, lang, device="cuda"):
 
     # Prepare data
-    input_ids = create_input_ids(token_lists, pad_token_id).to(device)
+    input_ids = create_input_ids(lang, token_lists, pad_token_id).to(device)
     labels = input_ids.clone()  # GPT-2 uses input as labels for CLM task
     attention_mask = create_attention_mask(token_lists).to(device)
 
@@ -84,13 +86,13 @@ if __name__ == "__main__":
                         const='all',
                         nargs='?',
                         choices=FUNCTION_MAP.keys(),
-                        help='Perturbation function used to transform BabyLM dataset')
+                        help='Perturbation function used to transform the multilingual dataset')
     parser.add_argument('test_perturbation_type',
                         default='all',
                         const='all',
                         nargs='?',
                         choices=FUNCTION_MAP.keys(),
-                        help='Perturbation function used to transform test BabyLM dataset')
+                        help='Perturbation function used to transform test the multilingual dataset')
     parser.add_argument('train_set',
                         default='all',
                         const='all',
@@ -105,19 +107,16 @@ if __name__ == "__main__":
                         choices=list(PAREN_MODELS.keys()) + ["randinit"],
                         help='Parenthesis model')
     parser.add_argument('vs', help='Vocabulary size')
-    parser.add_argument('-np', '--no_pos_encodings', action='store_true',
-                        help="Train GPT-2 with no positional encodings")
 
     # Get args
     args = parser.parse_args()
-    no_pos_encodings_underscore = "_no_positional_encodings" if args.no_pos_encodings else ""
     vs = args.vs
     la = args.train_set
     lang_lower_case = args.train_set.lower()
     gpt2_tokenizer = TOKENIZER[la]['shuffle']
     # Get path to model
-    model = f"{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}_seed{args.random_seed}"
-    model_path = f"{CHECKPOINT_READ_PATH}/{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}{no_pos_encodings_underscore}/babylm_{model}/runs/{model}/checkpoint-"
+    model = f"{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}_seed{args.random_seed}"
+    model_path = f"{CHECKPOINT_READ_PATH}/{args.perturbation_type}_{lang_lower_case}_{args.train_set}_{args.paren_model}/babylm_{model}/runs/{model}/checkpoint-"
 
     # Get perturbed test files
     test_files = sorted(glob(
@@ -165,14 +164,14 @@ if __name__ == "__main__":
         for i in tqdm(range(0, len(token_sequences), BATCH_SIZE)):
             batch = token_sequences[i:i+BATCH_SIZE]
             ppls = get_perplexities(
-                model, batch, gpt2_tokenizer.eos_token_id)
+                model, batch, gpt2_tokenizer.eos_token_id, la)
             perplexities.extend(ppls)
 
         # Add ppls to df
         ppl_df[f'Perplexities (ckpt {ckpt})'] = perplexities
 
     # Write results to CSV
-    directory = f"perplexity_results/{args.perturbation_type}_{args.train_set}{no_pos_encodings_underscore}"
+    directory = f"perplexity_results/{args.perturbation_type}_{args.train_set}"
     if not os.path.exists(directory):
         os.makedirs(directory)
     vs = str(vs)
