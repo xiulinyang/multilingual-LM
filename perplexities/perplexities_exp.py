@@ -171,11 +171,18 @@ if __name__ == "__main__":
         ppl_df[f'Perplexities (ckpt {ckpt})'] = perplexities
 
     # Write results to CSV
-    directory = f"perplexity_results/{args.perturbation_type}_{args.train_set}"
+    if args.perturbation_type!=args.test_perturbation_type:
+        directory = f"perplexity_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}"
+        file = directory + \
+            f"/{args.paren_model}_seed{args.random_seed}_train_{args.perturbation_type}_test_{args.test_perturbation_type}_{lang_lower_case}_{vs}.csv"
+        print(f"Writing results to CSV: {file}")
+    else:
+        directory = f"perplexity_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}"
+        file = directory + \
+               f"/{args.paren_model}_seed{args.random_seed}_train_{args.perturbation_type}_test_{args.test_perturbation_type}_{lang_lower_case}_{vs}.csv"
+
     if not os.path.exists(directory):
         os.makedirs(directory)
     vs = str(vs)
-    file = directory + \
-        f"/{args.paren_model}_seed{args.random_seed}_test_{args.test_perturbation_type}_{lang_lower_case}_{vs}.csv"
     print(f"Writing results to CSV: {file}")
     ppl_df.to_csv(file)
