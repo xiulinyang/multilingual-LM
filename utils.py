@@ -18,7 +18,7 @@ import torch
 # CONSTANTS
 ##############################################################################
 ROOT_PATH = '/scratch/xiulyang'
-EXP_LANGS = ['EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ITRN', 'ENRN','PTRN','AANN','NNDA','ZHRN']
+EXP_LANGS = ['AR05k', 'AR1k', 'AR2k', 'AR3k', 'AR5k','EN1k', 'RU1k','RU2k','RU3k','RU05k','EN05k', 'DE05k', 'TR05k', 'RU5k','DE3k','DE5k','DE1k', 'DE2k', 'TR1k', 'TR2k', 'EN2k','TR3k','EN3k', 'EN5k', 'TR15k', 'TR20k', 'TR10k', 'TR5k', 'EN', 'DE', 'DENF', 'AR', 'ZH', 'RU', 'TR', 'RO','ES', 'FR', 'PL', 'PT', 'NL', 'IT', 'FR', 'ITRN', 'ENRN','PTRN','AANN','NNDA','ZHRN']
 MULTILINGUAL_SPLITS = ["train", 'dev', 'test', 'unittest']
 SEEDS = [21, 53, 84]
 CHECKPOINTS = list(range(50, 501, 50))
@@ -45,6 +45,15 @@ BOS_TOKEN = "<BOS_TOKEN>"
 PART_TOKENS = set(["n't", "'ll", "'s", "'re", "'ve", "'m"])
 PUNCT_TOKENS = set(punctuation)
 
+
+
+PAREN_MODEL_PATH = "/u/scr/isabelvp//tilt-stuff/tilt-finetuning/pretrained_checkpoints/"
+PAREN_MODELS = {
+    "CROSS": "flat-parens_vocab500-uniform_deplength-nesting-nolimit",
+    "NEST": "nested-parens0.49_vocab500-uniform",
+    "RAND": "random_vocab500-uniform",
+}
+
 ##############################################################################
 # HELPER FUNCTIONS
 ##############################################################################
@@ -58,7 +67,7 @@ def write_file(directory, filename, lines):
 
 def get_gpt2_tokenizer_with_markers(marker_list, lang):
     if lang in EXP_LANGS:    
-        tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DICT[lang])
+        tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DICT[lang],use_fast=False)
     else:
         WarningMessage("You didn't specify a language yet, "
                        "so we use the English gpt2 tokenizer by default!")
@@ -640,14 +649,47 @@ TOKENIZER_DICT = {
    "DE": "malteos/gpt2-xl-wechsel-german",
    "RU": "sberbank-ai/rugpt3large_based_on_gpt2",
    "RO": "dumitrescustefan/gpt-neo-romanian-780m",
+    "DE5k": "/scratch/xiulyang/multilingual-LM/tokenizers/DE/50000",
    "TR": "ytu-ce-cosmos/turkish-gpt2",
+
+   "AR05k": "/scratch/xiulyang/multilingual-LM/tokenizers/AR/5000",
+    "AR5k": "/scratch/xiulyang/multilingual-LM/tokenizers/AR/50000",
+    "AR3k": "/scratch/xiulyang/multilingual-LM/tokenizers/AR/30000",
+    "AR1k": "/scratch/xiulyang/multilingual-LM/tokenizers/AR/10000",
+    "AR2k": "/scratch/xiulyang/multilingual-LM/tokenizers/AR/20000",
+
+    "RU2k": "/scratch/xiulyang/multilingual-LM/tokenizers/RU/20000",
+     "RU3k": "/scratch/xiulyang/multilingual-LM/tokenizers/RU/30000",
+      "RU5k": "/scratch/xiulyang/multilingual-LM/tokenizers/RU/50000",
+   "RU1k": "/scratch/xiulyang/multilingual-LM/tokenizers/RU/10000",
+   "EN1k": "/scratch/xiulyang/multilingual-LM/tokenizers/EN/10000",
+   "TR15k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/150000",
+   "TR20k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/200000",
+   "TR10k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/100000",
+   "TR5k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/50000",
+    "EN05k": "/scratch/xiulyang/multilingual-LM/tokenizers/EN/5000", 
+   "TR05k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/5000",
+     "RU05k": "/scratch/xiulyang/multilingual-LM/tokenizers/RU/5000",
+   "TR1k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/10000",
+   "DE05k": "/scratch/xiulyang/multilingual-LM/tokenizers/DE/5000",
+   "DE3k": "/scratch/xiulyang/multilingual-LM/tokenizers/DE/30000",
+    "DE1k": "/scratch/xiulyang/multilingual-LM/tokenizers/DE/10000",
+     "DE2k": "/scratch/xiulyang/multilingual-LM/tokenizers/DE/20000",
+   "TR3k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/30000",
+     "EN5k": "/scratch/xiulyang/multilingual-LM/tokenizers/EN/50000",
+   "EN3k": "/scratch/xiulyang/multilingual-LM/tokenizers/EN/30000",
+   "EN2k": "/scratch/xiulyang/multilingual-LM/tokenizers/EN/20000",
+   "TR2k": "/scratch/xiulyang/multilingual-LM/tokenizers/TR/20000",
    "FR": "lightonai/pagnol-xl",
    "NL": "yhavinga/gpt-neo-125M-dutch",
-   "IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
-   "ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
+    "IT":"flax-community/papuGaPT2",
+     "ITRN":"flax-community/papuGaPT2",
+   #"IT": "iGeniusAI/Italia-9B-Instruct-v0.1",
+   #"ITRN": "iGeniusAI/Italia-9B-Instruct-v0.1",
    "PL":"flax-community/papuGaPT2",
-    "PT": "NOVA-vision-language/GlorIA-1.3B",
-    "PTRN": "NOVA-vision-language/GlorIA-1.3B",
+   #"PT": "TucanoBR/Tucano-1b1",
+   "PT": "NOVA-vision-language/GlorIA-1.3B",
+    "PTRN": "TucanoBR/Tucano-1b1",
     "ZH": "google-bert/bert-base-chinese",
     "ZHRN":"google-bert/bert-base-chinese",
     "AR": "aubmindlab/aragpt2-base"}
@@ -665,6 +707,37 @@ gpt2_tokenizer_it = get_gpt2_tokenizer_with_markers([], 'IT')
 gpt2_tokenizer_zh = get_gpt2_tokenizer_with_markers([], 'ZH')
 gpt2_tokenizer_ar = get_gpt2_tokenizer_with_markers([], 'AR')
 
+
+
+gpt2_tokenizer_ar5k = get_gpt2_tokenizer_with_markers([],'AR5k')
+gpt2_tokenizer_ar3k = get_gpt2_tokenizer_with_markers([],'AR3k')
+gpt2_tokenizer_ar2k = get_gpt2_tokenizer_with_markers([],'AR2k')
+gpt2_tokenizer_ar1k = get_gpt2_tokenizer_with_markers([],'AR1k')
+gpt2_tokenizer_ar05k = get_gpt2_tokenizer_with_markers([],'AR05k')
+
+gpt2_tokenizer_ru5k = get_gpt2_tokenizer_with_markers([],'RU5k')
+gpt2_tokenizer_ru3k = get_gpt2_tokenizer_with_markers([],'RU3k')
+gpt2_tokenizer_ru2k = get_gpt2_tokenizer_with_markers([],'RU2k')
+gpt2_tokenizer_ru1k = get_gpt2_tokenizer_with_markers([],'RU1k')
+gpt2_tokenizer_tr1k = get_gpt2_tokenizer_with_markers([],'TR1k')
+gpt2_tokenizer_tr15k = get_gpt2_tokenizer_with_markers([],'TR15k')
+gpt2_tokenizer_tr20k = get_gpt2_tokenizer_with_markers([],'TR20k')
+gpt2_tokenizer_tr5k = get_gpt2_tokenizer_with_markers([],'TR5k')
+gpt2_tokenizer_tr10k = get_gpt2_tokenizer_with_markers([],'TR10k')
+gpt2_tokenizer_de05k = get_gpt2_tokenizer_with_markers([],'DE05k')
+gpt2_tokenizer_en1k = get_gpt2_tokenizer_with_markers([],'EN1k')
+gpt2_tokenizer_tr05k = get_gpt2_tokenizer_with_markers([],'TR05k')
+gpt2_tokenizer_ru05k = get_gpt2_tokenizer_with_markers([],'RU05k')
+gpt2_tokenizer_en05k = get_gpt2_tokenizer_with_markers([],'EN05k')
+gpt2_tokenizer_de5k = get_gpt2_tokenizer_with_markers([],'DE5k')
+gpt2_tokenizer_de3k = get_gpt2_tokenizer_with_markers([],'DE3k')
+gpt2_tokenizer_de2k = get_gpt2_tokenizer_with_markers([],'DE2k')
+gpt2_tokenizer_de1k = get_gpt2_tokenizer_with_markers([],'DE1k')
+gpt2_tokenizer_tr2k = get_gpt2_tokenizer_with_markers([],'TR2k')
+gpt2_tokenizer_en2k = get_gpt2_tokenizer_with_markers([],'EN2k')
+gpt2_tokenizer_tr3k = get_gpt2_tokenizer_with_markers([],'TR3k')
+gpt2_tokenizer_en3k = get_gpt2_tokenizer_with_markers([],'EN3k')
+gpt2_tokenizer_en5k = get_gpt2_tokenizer_with_markers([],'EN5k')
 gpt2_hop_tokenizer_en = get_gpt2_tokenizer_with_markers(
            [MARKER_HOP_SING, MARKER_HOP_PLUR], 'EN')
 gpt2_rev_tokenizer_en = get_gpt2_tokenizer_with_markers(
@@ -702,6 +775,34 @@ TOKENIZER = {
 'ENRN': {"shuffle": gpt2_tokenizer_en},
 'AANN': {"shuffle": gpt2_tokenizer_en},
 'NNDA': {"shuffle": gpt2_tokenizer_en},
+"TR1k":{"shuffle": gpt2_tokenizer_tr1k},
+"EN1k":{"shuffle": gpt2_tokenizer_en1k},
+"EN2k":{"shuffle": gpt2_tokenizer_en2k},
+"TR2k":{"shuffle": gpt2_tokenizer_tr2k},
+"EN3k":{"shuffle": gpt2_tokenizer_en3k},
+"EN5k":{"shuffle": gpt2_tokenizer_en5k},
+"TR3k":{"shuffle": gpt2_tokenizer_tr3k},
+"TR15k":{"shuffle": gpt2_tokenizer_tr15k},
+"TR10k":{"shuffle": gpt2_tokenizer_tr10k},
+"TR5k":{"shuffle": gpt2_tokenizer_tr5k},
+"TR20k":{"shuffle": gpt2_tokenizer_tr20k},
+"DE1k":{"shuffle": gpt2_tokenizer_de1k},
+"DE2k":{"shuffle": gpt2_tokenizer_de2k},
+"DE3k":{"shuffle": gpt2_tokenizer_de3k},
+"DE5k":{"shuffle": gpt2_tokenizer_de5k},
+"RU1k":{"shuffle": gpt2_tokenizer_ru1k},
+"RU2k":{"shuffle": gpt2_tokenizer_ru2k},
+"RU3k":{"shuffle": gpt2_tokenizer_ru3k},
+"RU5k":{"shuffle": gpt2_tokenizer_ru5k},
+"RU05k":{"shuffle": gpt2_tokenizer_ru05k},
+"TR05k":{"shuffle": gpt2_tokenizer_tr05k},
+"EN05k":{"shuffle": gpt2_tokenizer_en05k},
+"DE05k":{"shuffle": gpt2_tokenizer_de05k},
+"AR1k":{"shuffle": gpt2_tokenizer_ar1k},
+"AR2k":{"shuffle": gpt2_tokenizer_ar2k},
+"AR3k":{"shuffle": gpt2_tokenizer_ar3k},
+"AR5k":{"shuffle": gpt2_tokenizer_ar5k},
+"AR05k":{"shuffle": gpt2_tokenizer_ar05k},
 }
 
 FUNCTION_MAP = {
