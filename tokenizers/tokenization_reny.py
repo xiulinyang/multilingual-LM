@@ -2,6 +2,7 @@ from torch.hub import ENV_GITHUB_TOKEN
 from transformers import AutoTokenizer, AutoModel
 from pathlib import Path
 import math
+import json
 from tqdm import tqdm
 import tokenization_scorer
 from collections import Counter
@@ -43,27 +44,27 @@ TOKENIZER_DICT = {
     "AR5k": "/scratch/xiulyang/multilingual-LM/tokenizers/AR/50000",
     }
 
-with open('tokenization_results_reny_test.tsv', 'w', encoding='utf-8') as f:
-    for language in tqdm(TOKENIZER_DICT):
-        tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DICT[language])
-        if language.startswith("EN"):
-            lang='EN'
-        elif language.startswith("DE"):
-            lang='DE'
-        elif language.startswith("RU"):
-            lang='RU'
-        elif language.startswith("TR"):
-            lang='TR'
-        elif language.startswith("AR"):
-            lang='AR'
-        else:
-            raise ValueError ('This language is not supported yet!')
-        sents = Path(f'/scratch/xiulyang/multilingual-LM/data/multilingual/{lang}/test/{lang}.test').read_text().strip().split('\n')
-        token_num =0
-        tokenized_text =[]
-        for sent in tqdm(sents):
-            tokens = tokenizer.tokenize(sent)
-            tokenized_text.extend(tokens)
 
+for language in tqdm(TOKENIZER_DICT):
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DICT[language])
+    if language.startswith("EN"):
+        lang='EN'
+    elif language.startswith("DE"):
+        lang='DE'
+    elif language.startswith("RU"):
+        lang='RU'
+    elif language.startswith("TR"):
+        lang='TR'
+    elif language.startswith("AR"):
+        lang='AR'
+    else:
+        raise ValueError ('This language is not supported yet!')
+    sents = Path(f'/scratch/xiulyang/multilingual-LM/data/multilingual/{lang}/test/{lang}.test').read_text().strip().split('\n')
+    token_num =0
+    tokenized_text =[]
+    for sent in tqdm(sents):
+        tokens = tokenizer.tokenize(sent)
+        tokenized_text.extend(tokens)
+    with open(f'freq/{language}.json', 'w', encoding='utf-8') as f:
         freq = Counter(tokenized_text)
         json.dump(freq, f)
