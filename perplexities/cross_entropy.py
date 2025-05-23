@@ -69,10 +69,11 @@ if __name__ == "__main__":
     for sent in tqdm(language_ppl):
         sent_xentropy = get_cross_entropy_from_ppl(sent, gpt2_tokenizer)
         corpus_xentropy.append(sent_xentropy)
-
+    directory = f'cross_entropy_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}'
+    os.makedirs(directory, exist_ok=True)
     corpus_xentropy = pd.DataFrame(corpus_xentropy)
     corpus_xentropy.to_csv(
-        f'cross_entropy_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}/{args.paren_model}_seed{args.random_seed}_test_{lang_lower_case}_{vs}.csv',
+        f'directory/{args.paren_model}_seed{args.random_seed}_test_{lang_lower_case}_{vs}.csv',
         mode='w', index=False)
 
 
