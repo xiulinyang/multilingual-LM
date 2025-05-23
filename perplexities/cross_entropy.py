@@ -63,7 +63,7 @@ if __name__ == "__main__":
     lang_lower_case = args.train_set.lower()
     gpt2_tokenizer = TOKENIZER[la]['shuffle']
 
-    language_ppl = pd.read_csv(f'perplexity_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}/{args.paren_model}_seed{args.random_seed}_train_{args.perturbation_type}_test_{lang_lower_case}_{vs}.csv').to_dict(orient='records')
+    language_ppl = pd.read_csv(f'perplexity_results/{args.perturbation_type}_{args.train_set}/{args.paren_model}_seed{args.random_seed}_test_{lang_lower_case}_{vs}.csv').to_dict(orient='records')
 
     corpus_xentropy = []
     for sent in tqdm(language_ppl):
@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     corpus_xentropy = pd.DataFrame(corpus_xentropy)
     corpus_xentropy.to_csv(
-        f'cross_entropy_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}/{args.paren_model}_seed{args.random_seed}_train_{args.perturbation_type}_test_{lang_lower_case}_{vs}.csv',
+        f'cross_entropy_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}/{args.paren_model}_seed{args.random_seed}_test_{lang_lower_case}_{vs}.csv',
         mode='w', index=False)
 
 
