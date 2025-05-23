@@ -16,7 +16,7 @@ CHECKPOINTS = list(range(0, MAX_TRAINING_STEPS+1, 100))
 
 def get_cross_entropy_from_ppl(ppl, tokenizer):
     sent_xentropy={}
-    sent_text = ppl['Sentence']
+    sent_text = ppl['Sentences']
     sent_xentropy['Sentences'] = sent_text
     for i in CHECKPOINTS:
         checkpoint = str(i)
