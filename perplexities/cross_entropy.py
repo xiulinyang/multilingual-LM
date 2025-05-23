@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-
+import os
 from transformers import GPT2LMHeadModel
 from utils import FUNCTION_MAP, TOKENIZER, EXP_LANGS
 from tqdm import tqdm
