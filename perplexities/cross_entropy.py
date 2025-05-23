@@ -1,3 +1,6 @@
+import sys
+sys.path.append("..")
+
 from transformers import GPT2LMHeadModel
 from utils import FUNCTION_MAP, TOKENIZER, EXP_LANGS
 from tqdm import tqdm
@@ -63,7 +66,7 @@ if __name__ == "__main__":
     language_ppl = pd.read_csv(f'perplexity_results/{args.perturbation_type}_{args.train_set}_{args.test_perturbation_type}/{args.paren_model}_seed{args.random_seed}_train_{args.perturbation_type}_test_{lang_lower_case}_{vs}.csv').to_dict(orient='records')
 
     corpus_xentropy = []
-    for sent in language_ppl:
+    for sent in tqdm(language_ppl):
         sent_xentropy = get_cross_entropy_from_ppl(sent, gpt2_tokenizer)
         corpus_xentropy.append(sent_xentropy)
 
