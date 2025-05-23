@@ -73,7 +73,7 @@ if __name__ == "__main__":
     os.makedirs(directory, exist_ok=True)
     corpus_xentropy = pd.DataFrame(corpus_xentropy)
     corpus_xentropy.to_csv(
-        f'directory/{args.paren_model}_seed{args.random_seed}_test_{lang_lower_case}_{vs}.csv',
+        f'{directory}/{args.paren_model}_seed{args.random_seed}_test_{lang_lower_case}_{vs}.csv',
         mode='w', index=False)
 
 
